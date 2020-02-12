@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -28,7 +29,14 @@ import java.util.regex.Pattern;
 public class FonctionsPartages {
     static Connection cn =DataSource.getInstance().getConnexion();
     
-    
+          public static int calculerNombreSeconde(Timestamp date1,Timestamp date2){
+              long intervalle = date2.getTime() - date1.getTime();
+        return (int) TimeUnit.SECONDS.convert(intervalle, TimeUnit.MILLISECONDS);
+        }
+ 
+        public static float calculerPrixParraportAuTemps(float prixDuneHeure,int seconde){
+        return ((float) seconde/3600)*prixDuneHeure;
+        }
               public static boolean verifierSiChampExistant(String table,String champs){
      String requette="SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME LIKE '"+champs+"'";
      Statement st;

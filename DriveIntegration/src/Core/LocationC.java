@@ -39,7 +39,7 @@ public class LocationC {
             ResultSet rs= pt1.executeQuery();
             while (rs.next()){
                 float prixLocal=rs.getFloat(1);
-                prix= Utils.FonctionsPartagees.calculerPrixParraportAuTemps(prixLocal, Utils.FonctionsPartagees.calculerNombreSeconde(p.getDate_d(), p.getDate_f()));
+                prix= Utils.FonctionsPartages.calculerPrixParraportAuTemps(prixLocal, Utils.FonctionsPartages.calculerNombreSeconde(p.getDate_d(), p.getDate_f()));
             }
            } catch (SQLException ex) {
                Logger.getLogger(LocationC.class.getName()).log(Level.SEVERE, null, ex);
