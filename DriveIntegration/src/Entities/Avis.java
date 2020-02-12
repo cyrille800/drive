@@ -5,6 +5,9 @@
  */
 package Entities;
 
+import Utils.Criteres;
+import Utils.Interval;
+
 /**
  *
  * @author ASUS
@@ -79,6 +82,22 @@ public class Avis {
     @Override
     public String toString() {
         return "AvisC{" + "id_avis=" + id_avis + ", id_chauffeur=" + id_chauffeur + ", id_client=" + id_client + ", msg=" + msg + ", note=" + note + '}';
+    }
+
+    public void setInt(int i, int id_chauffeur) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setString(int i, String msg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean filtrerParInterval(Interval listeInterval) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean filterSelonDesCritere(Criteres critere) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     
