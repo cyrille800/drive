@@ -44,7 +44,8 @@ public class ChauffeurC {
                 return p;
    }
    public void ajouterChauffeur(Chauffeur p){
-          String requete ="insert into chauffeur(adresse,cin,permis,nom,prenom) values (?,?,?,?,?) ";
+       if(Utils.FonctionsPartages.verifierCin(p.getCin())){
+        String requete ="insert into chauffeur(adresse,cin,permis,nom,prenom) values (?,?,?,?,?) ";
         try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
@@ -57,6 +58,12 @@ public class ChauffeurC {
         } catch (SQLException ex) {
             Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
         }
+       }else{
+           
+           System.out.println("cin incorrect");
+           
+       }
+         
          
     }
     public List<Chauffeur> afficher(){

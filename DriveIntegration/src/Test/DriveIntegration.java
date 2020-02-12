@@ -12,6 +12,8 @@ import Utils.DataSource;
 import Core.TaxiC;
 import Utils.Criteres;
 import Utils.Interval;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -26,11 +28,11 @@ public class DriveIntegration {
     public static void main(String[] args) {
         // TODO code application logic here
          DataSource ds =  DataSource.getInstance();
-          System.out.println(ds.hashCode());
+          //System.out.println(ds.hashCode());
         
           
-          Chauffeur p = new Chauffeur("ghazella",66,21,"skander","mejbri");
-   ChauffeurC ps = new ChauffeurC();
+       //   Chauffeur p = new Chauffeur("ghazella",66,21,"skander","mejbri");
+  // ChauffeurC ps = new ChauffeurC();
    /*ps.ajouterChauffeur(p);
    System.out.println(ps.afficher());
    ps.modifierChauffeur(1,"Ariana",287,55);
@@ -38,8 +40,8 @@ public class DriveIntegration {
         ps.supprimerChauffeur(1);
       System.out.println(ps.afficher()+"deleted");*/
           
-          Taxi t = new Taxi(25,"dgsd","skander");
-   TaxiC pt = new TaxiC();
+      //    Taxi t = new Taxi(25,"dgsd","skander");
+   //TaxiC pt = new TaxiC();
    //pt.ajouterTaxi(t);
    //System.out.println(pt.afficher());
    //pt.modifierTaxi(8,147,"aaasdg");
@@ -57,7 +59,10 @@ public class DriveIntegration {
      listeInterval.ajouter("permis",11,21);
      System.out.println(ps.filtrerParInterval(listeInterval));*/
      
-        System.out.println(ps.trier("desc", "id_user"));
+       // System.out.println(ps.trier("desc", "id_user"));
+        
+ 
+    
         }
           
           
