@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author Belgaroui Ghazi
  */
-public class ChauffeurC {
+public class ChauffeurC  {
        Connection cn =DataSource.getInstance().getConnexion();
        
        public Chauffeur recupereResultat(ResultSet rs){
