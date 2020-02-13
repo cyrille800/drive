@@ -187,4 +187,23 @@ public class VeloC {
    
    return list;
    }
+          public List<Velo> RechercheAvance(String mot){
+   List<Velo> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("velo",mot);
+  
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
 }

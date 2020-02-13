@@ -8,7 +8,9 @@ package Core;
 import Entities.Event;
 import Entities.Location;
 import Entities.Offre;
+import Utils.Criteres;
 import Utils.DataSource;
+import Utils.Interval;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +29,67 @@ import java.util.logging.Logger;
 public class OffreC {
 
     Connection cn = DataSource.getInstance().getConnexion();
+       public Offre recupereResultat(ResultSet rs){
+               Offre e = new Offre();
+         try {
+                     
+                e.setId_offre(rs.getInt(1));
+                e.setDate_d(rs.getTimestamp(2));
+                e.setDate_f(rs.getTimestamp(3));
+                e.setType(rs.getString(4));
+                e.setNom(rs.getString(5));
+                e.setReduction_offre(rs.getFloat(6));
+                e.setCode_promo(rs.getString(7));
+                e.setReduction_promo(rs.getFloat(8));
+                e.setPrix_offre(rs.getFloat(9));
+         } catch (SQLException ex) {
+             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return e;
+   } 
+  public Offre recupereResultatReduction(ResultSet rs){
+               Offre e = new Offre();
+         try {
+                     
+                e.setId_offre(rs.getInt(1));
+                e.setDate_d(rs.getTimestamp(2));
+                e.setDate_f(rs.getTimestamp(3));
+                e.setType(rs.getString(4));
+                e.setNom(rs.getString(5));
+                e.setReduction_offre(rs.getFloat(6));
+             //   e.setCode_promo(rs.getString(7));
+           //     e.setReduction_promo(rs.getFloat(8));
+                e.setPrix_offre(rs.getFloat(7));
+         } catch (SQLException ex) {
+             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return e;
+   }
+  
+    public Offre recupereResultaPromo(ResultSet rs){
+               Offre e = new Offre();
+         try {
+                     
+                e.setId_offre(rs.getInt(1));
+                e.setDate_d(rs.getTimestamp(2));
+                e.setDate_f(rs.getTimestamp(3));
+                e.setType(rs.getString(4));
+                e.setNom(rs.getString(5));
+           //     e.setReduction_offre(rs.getFloat(6));
+                e.setCode_promo(rs.getString(6));
+                e.setReduction_promo(rs.getFloat(7));
+                e.setPrix_offre(rs.getFloat(8));
+         } catch (SQLException ex) {
+             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return e;
+   }
 
     public void ajouterReduction(Offre o) {
         String requete = "insert into offre (date_d,date_f,type,nom,reduction_offre,prix_offre) values (?,?,?,?,?,?) "; // précomplier
@@ -84,18 +147,9 @@ public class OffreC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()) {
-                Offre e = new Offre();
-                e.setId_offre(rs.getInt(1));
-                e.setDate_d(rs.getTimestamp(2));
-                e.setDate_f(rs.getTimestamp(3));
-                e.setType(rs.getString(4));
-                e.setNom(rs.getString(5));
-                e.setReduction_offre(rs.getFloat(6));
-             //   e.setCode_promo(rs.getString(7));
-           //     e.setReduction_promo(rs.getFloat(8));
-                e.setPrix_offre(rs.getFloat(7));
+             list.add(recupereResultatReduction(rs));
              
-                list.add(e);
+               
             }
         } catch (SQLException ex) {
             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,6 +157,9 @@ public class OffreC {
         return list;
 
     }
+
+    
+    /**********************************************************************************/
        public List<Offre> afficherPromo() {
         List<Offre> list = new ArrayList<>(); // array list Vectoc plus lent il ne pejut pas executer plusieurs en mm temps
         String requete = "select id_offre,date_d,date_f,type,nom,code_promo,reduction_promo,prix_offre from offre WHERE code_promo is NOT NULL ORDER BY id_offre DESC "; //WHERE reduction_offre is NOT NULL || id_offre,date_d,date_f,type,nom,reduction_offre,code_promo,reduction_promo,prix_offre
@@ -110,18 +167,9 @@ public class OffreC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()) {
-                Offre e = new Offre();
-                e.setId_offre(rs.getInt(1));
-                e.setDate_d(rs.getTimestamp(2));
-                e.setDate_f(rs.getTimestamp(3));
-                e.setType(rs.getString(4));
-                e.setNom(rs.getString(5));
-              //  e.setReduction_offre(rs.getFloat(6));
-              e.setCode_promo(rs.getString(6));
-              e.setReduction_promo(rs.getFloat(7));
-                e.setPrix_offre(rs.getFloat(8));
              
-                list.add(e);
+             
+                list.add(recupereResultaPromo(rs));
             }
         } catch (SQLException ex) {
             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
@@ -179,6 +227,110 @@ public class OffreC {
             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    /***************************************************************************/
+    
+
+       
+      public List<Offre> RechercheAvance(String mot){
+   List<Offre> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("offre",mot);
+     //  System.out.println(requete);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+    
+
+
+
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**********************************************************************************************************************************/
+         public List<Offre> filtrerParInterval(Interval listeInterval){
+        
+     
+     List<Offre> list =new ArrayList<>();
+          String requete = Utils.FonctionsPartages.genererRequetteInterval("offre", listeInterval.getListeListeInterval());
+        try {
+            Statement st = cn.createStatement();
+            
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+                list.add(recupereResultat(rs));
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return list;
+     }
+   public List<Offre> filterSelonDesCritere(Criteres critere){
+   List<Offre> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteTrie("offre",critere.getListeCritere());
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+
+   public List<Offre> trier(String ordre,String champs){
+   List<Offre> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"offre",champs);
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+            list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+   
+   
+   
+
+
+
 }
