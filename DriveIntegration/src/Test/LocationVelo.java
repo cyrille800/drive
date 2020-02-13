@@ -41,12 +41,12 @@ public class LocationVelo {
           Timestamp timestamp1=new java.sql.Timestamp(parsedDate.getTime());
           Timestamp timestamp2=new java.sql.Timestamp(parsedDate2.getTime());
           
-         // Location p = new Location(1,15,timestamp1,timestamp2,3);
+          Location p = new Location(1,15,timestamp1,timestamp2,3);
    LocationC pr = new LocationC();
-   //pr.ajouterLocation(p);
-    //System.out.println(pr.afficher());
+   pr.ajouterLocation(p);
+    System.out.println(pr.afficher());
     //System.out.println(pr.Trier());
-  // pr.modifierLocation(47,30,2,timestamp1,timestamp2,3);
+  pr.modifierLocation(47,"prix",30);
       // System.out.println(pr.afficher());
         //pr.supprimerLocation(46);
        // System.out.println(pr.afficher());
@@ -69,8 +69,8 @@ public class LocationVelo {
           //Velo p = new Velo("ghada","hs",3,"hsdh",3);
           VeloC ps=new VeloC();
           //ps.ajouterVelo(p);
-          //System.out.println(ps.afficher());
-            //ps.modifierVelo(2,"skander","hs",3,"hsdh",30);
+          System.out.println(ps.afficher());
+            ps.modifierVelo(2,"type","ghada");
             
           
         //System.out.println(ps.RechercheAvance("a"));
