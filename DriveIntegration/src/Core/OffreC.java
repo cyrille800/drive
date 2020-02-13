@@ -10,8 +10,10 @@ import Entities.Location;
 import Entities.Offre;
 import Utils.Criteres;
 import Utils.DataSource;
+import Utils.FonctionsPartages;
 import Utils.Interval;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -119,25 +121,43 @@ public class OffreC {
 
     }
     
-    public void ModifierReduction(int id, Timestamp date_allee, Timestamp date_retour, String type, String Nom, float reduction_offre, float prix_offre) {
-
-        String requete = "update offre set date_d=?, date_f=?,type=?,nom=?, reduction_offre=?, prix_offre=?  where id_offre=?";
-        try {
-            PreparedStatement pt = cn.prepareStatement(requete);
-
-            pt.setTimestamp(1, date_allee);
-            pt.setTimestamp(2, date_retour);
-            pt.setString(3, type);
-            pt.setString(4, Nom);
-            pt.setFloat(5, reduction_offre);
-            pt.setFloat(6, prix_offre);
-            pt.setInt(7, id);
+ 
+       public boolean modifierEvent(int id,String champs,Object value){
+    String   requete = "update offre set "+champs+"=?  where id_offre=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("offre","id_offre",id)==true && FonctionsPartages.verifierSiChampExistant("offre",champs)==true){
+       try {
+            PreparedStatement pt= cn.prepareStatement(requete);
+            
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+            Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+       }else{
+             System.out.println("le champs ou l'identifiant est incorrect");
+         }
+       
+       return false;
+   }
 
 
     public List<Offre> afficherReduction() {
@@ -208,25 +228,7 @@ public class OffreC {
             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void modifierCodePromo(int id, Timestamp date_allee, Timestamp date_retour, String type, String Nom,String code_promo, float reduction_promo, float prix_offre) {
 
-        String requete = "update offre set date_d=?, date_f=?,type=?,nom=?,code_promo=?, reduction_promo=?, prix_offre=?  where id_offre=?";
-        try {
-            PreparedStatement pt = cn.prepareStatement(requete);
-
-            pt.setTimestamp(1, date_allee);
-            pt.setTimestamp(2, date_retour);
-            pt.setString(3, type);
-            pt.setString(4, Nom);
-            pt.setString(5, code_promo);
-            pt.setFloat(6, reduction_promo);
-            pt.setFloat(7, prix_offre);
-            pt.setInt(8, id);
-            pt.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     /***************************************************************************/
     
 
