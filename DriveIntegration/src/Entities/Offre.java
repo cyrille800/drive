@@ -38,6 +38,7 @@ public class Offre {
         this.reduction_promo = reduction_promo;
         this.prix_offre = prix_offre;
     }
+    
 
     public Offre(Timestamp date_d, Timestamp date_f, String type, String nom, String code_promo, float reduction_promo, float prix_offre) {
         this.date_d = date_d;
