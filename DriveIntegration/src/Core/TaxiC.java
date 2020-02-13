@@ -6,8 +6,11 @@
 package Core;
 
 
+import Entities.Chauffeur;
 import Entities.Taxi;
+import Utils.Criteres;
 import Utils.DataSource;
+import Utils.Interval;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +27,20 @@ import java.util.logging.Logger;
  */
 public class TaxiC {
        Connection cn =DataSource.getInstance().getConnexion();
+           public Taxi recupereResultat(ResultSet rs){
+                Taxi p = new Taxi();
+         try {
+                p.setId_taxi(rs.getInt(1));
+                p.setId_chauffeur(rs.getInt(2));
+                p.setPhoto(rs.getString(3));
+                p.setNum_chassis(rs.getString(4));
+         } catch (SQLException ex) {
+             Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return p;
+   }
    public void ajouterTaxi(Taxi t){
        
        if(t.getNum_chassis().length()==13)
@@ -52,12 +69,8 @@ public class TaxiC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                Taxi p = new Taxi();
-                p.setId_taxi(rs.getInt(1));
-                p.setId_chauffeur(rs.getInt(2));
-                p.setPhoto(rs.getString(3));
-                p.setNum_chassis(rs.getString(4));
-                list.add(p);
+                             list.add(recupereResultat(rs));
+
             }
         }
          catch (SQLException ex) {
@@ -120,4 +133,81 @@ public class TaxiC {
         }
            
      }
+       public List<Taxi> filtrerParInterval(Interval listeInterval){
+        
+     
+     List<Taxi> list =new ArrayList<>();
+          String requete = Utils.FonctionsPartages.genererRequetteInterval("taxi", listeInterval.getListeListeInterval());
+        try {
+            Statement st = cn.createStatement();
+            
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+                list.add(recupereResultat(rs));
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return list;
+     }
+   
+   public List<Taxi> filterSelonDesCritere(Criteres critere){
+   List<Taxi> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteTrie("taxi",critere.getListeCritere());
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+
+   public List<Taxi> trier(String ordre,String champs){
+   List<Taxi> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"taxi",champs);
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+            list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+          public List<Taxi> RechercheAvance(String mot){
+   List<Taxi> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("taxi",mot);
+       System.out.println(requete);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
 }
