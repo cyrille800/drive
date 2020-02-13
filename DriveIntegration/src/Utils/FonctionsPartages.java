@@ -111,6 +111,20 @@ Pattern p = Pattern.compile(regex);
 Matcher matcher = p.matcher(email);
      return matcher.matches();
      }
+     
+     public static boolean verifierCin(int numero){
+    String regex = "[0-9]{8}";
+    Pattern p = Pattern.compile(regex);
+    Matcher matcher = p.matcher(Integer.toString(numero));
+     return matcher.matches();
+     }
+     
+     public static boolean verifierCin(String permis){
+           String regex = "[0-9]{2}/[0-9]{6}";
+            Pattern pk = Pattern.compile(regex);
+    Matcher matcher = pk.matcher(permis);
+        return matcher.matches();
+     }
 
      public static boolean verifierDate(String date){
     String regex = "^(3[01]|[12][0-9]|0[1-9])/(1[0-2]|0[1-9])/[0-9]{4}$";
