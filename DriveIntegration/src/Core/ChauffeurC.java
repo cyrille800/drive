@@ -7,6 +7,7 @@ package Core;
 
 
 import Entities.Chauffeur;
+import Entities.User;
 import Utils.Criteres;
 import Utils.DataSource;
 import Utils.Interval;
@@ -33,7 +34,7 @@ public class ChauffeurC  {
              p.setId_user(rs.getInt(1));
              p.setAdresse(rs.getString(2));
              p.setCin(rs.getInt(3));
-             p.setPermis(rs.getInt(4));
+             p.setPermis(rs.getString(4));
              p.setNom(rs.getString(5));
              p.setPrenom(rs.getString(6));
          } catch (SQLException ex) {
@@ -51,7 +52,7 @@ public class ChauffeurC  {
             PreparedStatement pst = cn.prepareStatement(requete);
             pst.setString(1,p.getAdresse());
             pst.setInt(2,p.getCin());
-            pst.setInt(3,p.getPermis());
+            pst.setString(3,p.getPermis());
             pst.setString(4,p.getNom());
             pst.setString(5,p.getPrenom());
             pst.executeUpdate();
@@ -84,7 +85,7 @@ public class ChauffeurC  {
         return list;
            
     }
-     public void modifierChauffeur(int id_user,String adresse,int cin,int permis,String nom,String prenom) {
+     public void modifierChauffeur(int id_user,String adresse,int cin,String permis,String nom,String prenom) {
        
        String   requete = "update chauffeur set adresse=?,cin=?,permis=?,nom=?,prenom=?  where id_user=?";
          try {
@@ -92,10 +93,10 @@ public class ChauffeurC  {
             
             pt.setString(1,adresse);
             pt.setInt(2,cin);
-            pt.setInt(3, permis);
+            pt.setString(3, permis);
             pt.setString(4,nom);
             pt.setString(5,prenom);
-            pt.setInt(4, id_user);
+            pt.setInt(6, id_user);
             pt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
@@ -161,6 +162,25 @@ public class ChauffeurC  {
                 ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
             list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+    public List<Chauffeur> RechercheAvance(String mot){
+   List<Chauffeur> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("chauffeur",mot);
+       System.out.println(requete);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
             }
             }
         }
