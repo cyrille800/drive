@@ -135,7 +135,7 @@ public class Offre {
 
     @Override
     public String toString() {
-        String chaine="{ id  "+ id_offre +" ,date debut : "+ date_d+ " ,date Fin : "+ date_f+ " ,type : "+type+" ,nom : "+nom;
+        String chaine="{ id : "+ id_offre +" ,date debut : "+ date_d+ " ,date Fin : "+ date_f+ " ,type : "+type+" ,nom : "+nom;
     if (code_promo!= null){
             chaine +=", code_promo=" + code_promo + ", reduction_promo=" + reduction_promo;
         }else{

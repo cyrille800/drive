@@ -175,7 +175,7 @@ Matcher matcher = p.matcher(date);
    if(listeInterval.keySet().size()!=0){
    requete+=" where ";
    }
-   int taille;
+  // int taille;
    int j=1;
    int taille1=listeInterval.keySet().size();
    for(String cle : listeInterval.keySet()){

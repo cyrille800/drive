@@ -22,18 +22,21 @@ public class DriveIntegration {
     public static void main(String[] args) {
         EventC us = new EventC();
 
-      /*  Criteres critere = new Criteres();
-        critere.ajouterCritere("depart", "Tunis");
-        critere.ajouterCritere("arrivee", "Kairoun");
-        System.out.println(us.filterSelonDesCritere(critere));*/
+        Criteres critere = new Criteres();
+       critere.ajouterCritere("depart", "Tunis");
+       critere.ajouterCritere("arrivee", "Carthage");
+        System.out.println(us.filterSelonDesCritere(critere));
+        
+      //  System.out.println(us.afficherEvent());
+        System.out.println("*******************************************************"); 
      OffreC oc = new OffreC();
-       System.out.println(oc.afficherReduction()); 
-        //System.out.println(oc.afficherPromo());
-      /*  Interval listeInterval = new Interval();
+     //  System.out.println(oc.afficherReduction()); 
+       System.out.println(oc.afficherPromo());
+        Interval listeInterval = new Interval();
 
         listeInterval.ajouter("depart", "Tunis", 2);
         listeInterval.ajouter("arrivee", 15, 16);
-        System.out.println(us.filtrerParInterval(listeInterval));*/
+        System.out.println(us.filtrerParInterval(listeInterval));
     }
 
 }
