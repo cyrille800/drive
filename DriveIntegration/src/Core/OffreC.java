@@ -90,15 +90,7 @@ public class OffreC {
                 
                 return e;
    }
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
     public void ajouterReduction(Offre o) {
         String requete = "insert into offre (date_d,date_f,type,nom,reduction_offre,prix_offre) values (?,?,?,?,?,?) "; // précomplier
         try {
