@@ -6,7 +6,9 @@
 package Core;
 
 import Entities.Event;
+import Utils.Criteres;
 import Utils.DataSource;
+import Utils.Interval;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +27,24 @@ import java.util.logging.Logger;
 public class EventC {
 
     Connection cn = DataSource.getInstance().getConnexion();
-
+  public Event recupereResultat(ResultSet rs){
+                Event e = new Event();
+         try {
+                 e.setId_event(rs.getInt(1));
+                e.setNom(rs.getString(2));
+                e.setNbr_place(rs.getInt(3));
+                e.setDepart(rs.getString(4));
+                e.setArrivee(rs.getString(5));
+                e.setDate_allee(rs.getTimestamp(6));
+                e.setDate_retour(rs.getTimestamp(7));
+                e.setDescription(rs.getString(8));
+         } catch (SQLException ex) {
+             Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return e;
+   }
     public void ajouterEvent(Event e) {
         String requete = "insert into event (nom,nbr_place,depart,arrivee,date_allee,date_retour,description) values (?,?,?,?,?,?,?) "; // précomplier
         try {
@@ -51,16 +70,9 @@ public class EventC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()) {
-                Event e = new Event();
-                e.setId_event(rs.getInt(1));
-                e.setNom(rs.getString(2));
-                e.setNbr_place(rs.getInt(3));
-                e.setDepart(rs.getString(4));
-                e.setArrivee(rs.getString(5));
-                e.setDate_allee(rs.getTimestamp(6));
-                e.setDate_retour(rs.getTimestamp(7));
-                e.setDescription(rs.getString(8));
-                list.add(e);
+               
+            
+                list.add(recupereResultat(rs));
             }
         } catch (SQLException ex) {
             Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,4 +143,84 @@ public List<Event> rechercher(String nom )
         }
         return list;  
      }
+
+   public List<Event> filtrerParInterval(Interval listeInterval){
+        
+     
+     List<Event> list =new ArrayList<>();
+          String requete = Utils.FonctionsPartages.genererRequetteInterval("event", listeInterval.getListeListeInterval());
+        try {
+            Statement st = cn.createStatement();
+            
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+                list.add(recupereResultat(rs));
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return list;
+     }
+   
+   public List<Event> filterSelonDesCritere(Criteres critere){
+   List<Event> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteTrie("event",critere.getListeCritere());
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+
+   public List<Event> trier(String ordre,String champs){
+   List<Event> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"event",champs);
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+            list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+
+    public List<Event> RechercheAvancePrRedution(String mot){
+   List<Event> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("event",mot);
+      // System.out.println(requete);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+
 }

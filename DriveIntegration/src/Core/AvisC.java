@@ -168,7 +168,24 @@ public class AvisC {
    return list;
    }
 
-      
+      public List<Avis> RechercheAvance(String mot){
+   List<Avis> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("avis",mot);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
       
       
 }

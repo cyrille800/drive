@@ -7,6 +7,7 @@ package Entities;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Objects;
 
 
 
@@ -51,6 +52,30 @@ private  int nbr_place;
     @Override
     public String toString() {
         return "Event{" + "id_event=" + id_event + ", nom=" + nom + ", nbr_place=" + nbr_place + ", depart=" + depart + ", arrivee=" + arrivee + ", date_allee=" + date_allee + ", date_retour=" + date_retour + ", description=" + description + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Event other = (Event) obj;
+        if (this.id_event != other.id_event) {
+            return false;
+        }
+        if (!Objects.equals(this.nom, other.nom)) {
+            return false;
+        }
+        return true;
     }
 
     public String getNom() {
