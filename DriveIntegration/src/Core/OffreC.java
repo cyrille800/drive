@@ -94,7 +94,9 @@ public class OffreC {
    }
 
     public void ajouterReduction(Offre o) {
-        String requete = "insert into offre (date_d,date_f,type,nom,reduction_offre,prix_offre) values (?,?,?,?,?,?) "; // précomplier
+        if(o.getType().equals("reservation") || o.getType().equals("location"))
+        { 
+             String requete = "insert into offre (date_d,date_f,type,nom,reduction_offre,prix_offre) values (?,?,?,?,?,?) "; // précomplier
         try {
 
             PreparedStatement pst = cn.prepareStatement(requete);
@@ -108,6 +110,11 @@ public class OffreC {
             System.out.println("Reduction ajoutée");
         } catch (SQLException ex) {
             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+            
+        }else{
+            System.out.println("le type "+o.getType()+" est incorrect");
         }
     }
    public void supprimerOffre(int id) {
@@ -211,7 +218,10 @@ public class OffreC {
     
     
     public void ajouterCodePromo(Offre o) {
-        String requete = "insert into offre (date_d,date_f,type,nom,code_promo,reduction_promo,prix_offre) values (?,?,?,?,?,?,?) "; // précomplier
+        if(o.getType().equals("Reservation") || o.getType().equals("Location")||o.getType().equals("reservation")||o.getType().equals("location"))
+        { 
+        if(FonctionsPartages.verifierValeurDunChampsExistant("offre", "code_promo", o.getCode_promo())==false){
+         String requete = "insert into offre (date_d,date_f,type,nom,code_promo,reduction_promo,prix_offre) values (?,?,?,?,?,?,?) "; // précomplier
         try {
 
             PreparedStatement pst = cn.prepareStatement(requete);
@@ -227,6 +237,13 @@ public class OffreC {
         } catch (SQLException ex) {
             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
         }
+        }else{
+                System.out.println("le code promo doit se differencier");
+            }
+        }else{
+                System.out.println("le type estsoit Reservation soit Location");
+            }
+       
     }
 
     /***************************************************************************/
