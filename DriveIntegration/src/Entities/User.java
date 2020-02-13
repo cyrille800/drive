@@ -78,6 +78,15 @@ public class User {
         this.mail = mail;
     }
 
+    public User(int id,int n_tel, String login, String mdp, int etat, String mail) {
+        this.id_user=id;
+        this.n_tel = n_tel;
+        this.login = login;
+        this.mdp = mdp;
+        this.etat = etat;
+        this.mail = mail;
+    }
+    
     public User() {
     }
 
