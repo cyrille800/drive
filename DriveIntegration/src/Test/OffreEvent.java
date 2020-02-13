@@ -92,8 +92,8 @@ public class OffreEvent {
          * *****************************************************************
          */
         /* OFFRE */
-        Offre op =new Offre(timestamp1,timestamp2,"Reservation","Promotion","JFAA12",2.1f,23f);
-        Offre or =new Offre(timestamp11,timestamp22,"location","Fete des meres",0.5f,23f);
+        Offre op =new Offre(timestamp1,timestamp2,"reservation","Promotion",2.1f);
+      //  Offre or =new Offre(timestamp11,timestamp22,"location","Fete des meres",0.5f,23f);
         OffreC oc = new OffreC();
         
       //  Criteres critere = new Criteres();
@@ -108,7 +108,7 @@ public class OffreEvent {
         
      //   System.out.println(oc.filtrerParInterval(null));
           System.out.println(oc.afficherReduction()); 
-        oc.ajouterCodePromo(op);
+        oc.ajouterReduction(op);
      //   oc.ajouterReduction(or);
      //   oc.supprimerOffre(2);
        // oc.modifierCodePromo(7, timestamp22, timestamp22, "Location", "Promotion", "JFFFF", 2.3f, 24.3f);
