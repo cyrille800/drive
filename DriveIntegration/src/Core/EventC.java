@@ -203,6 +203,24 @@ public List<Event> rechercher(String nom )
    return list;
    }
 
-
+    public List<Event> RechercheAvancePrRedution(String mot){
+   List<Event> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("event",mot);
+      // System.out.println(requete);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
 
 }
