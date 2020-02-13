@@ -6,7 +6,9 @@
 package Core;
 
 import Entities.Avis;
+import Utils.Criteres;
 import Utils.DataSource;
+import Utils.Interval;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +25,28 @@ import java.util.logging.Logger;
  */
 public class AvisC {
        Connection cn =DataSource.getInstance().getConnexion();
+       
+       public Avis recupereResultat(ResultSet rs){
+                         Avis a = new Avis();
+           try {
+               a.setId_avis(rs.getInt(1));
+                a.setId_chauffeur(rs.getInt(2));
+                a.setId_client(rs.getInt(3));
+                a.setMsg(rs.getString(4));
+                a.setNote(rs.getInt(5));
+           } catch (SQLException ex) {
+               Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
+           }
+
+                 
+                
+                return a;
+   } 
+       
+       
+       
+       
+       
    public void ajouterAvis(Avis a){
           String requete ="insert into avis(id_chauffeur,id_client,msg,note) values (?,?,?,?) ";
         try {
@@ -45,13 +69,8 @@ public class AvisC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                Avis a = new Avis();
-                a.setId_avis(rs.getInt(1));
-                a.setId_chauffeur(rs.getInt(2));
-                a.setId_client(rs.getInt(3));
-                a.setMsg(rs.getString(4));
-                a.setNote(rs.getInt(5));
-                list.add(a);
+
+              list.add(recupereResultat(rs));
             }
         }
          catch (SQLException ex) {
@@ -85,4 +104,88 @@ public class AvisC {
         }
            
      }
+      
+      public List<Avis> filtrerParInterval(Interval listeInterval){
+        
+     
+     List<Avis> list =new ArrayList<>();
+          String requete = Utils.FonctionsPartages.genererRequetteInterval("avis", listeInterval.getListeListeInterval());
+        try {
+            Statement st = cn.createStatement();
+            
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+                list.add(recupereResultat(rs));
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return list;
+     }
+      
+      
+      
+      public List<Avis> filterSelonDesCritere(Criteres critere){
+   List<Avis> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteTrie("avis",critere.getListeCritere());
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+      
+      
+      
+         public List<Avis> trier(String ordre,String champs){
+   List<Avis> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"avis",champs);
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+            list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+
+      public List<Avis> RechercheAvance(String mot){
+   List<Avis> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("avis",mot);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+      
+      
 }
