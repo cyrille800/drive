@@ -103,7 +103,32 @@ public class OffreC {
         return list;
 
     }
-    
+       public List<Offre> afficherPromo() {
+        List<Offre> list = new ArrayList<>(); // array list Vectoc plus lent il ne pejut pas executer plusieurs en mm temps
+        String requete = "select id_offre,date_d,date_f,type,nom,code_promo,reduction_promo,prix_offre from offre WHERE code_promo is NOT NULL ORDER BY id_offre DESC "; //WHERE reduction_offre is NOT NULL || id_offre,date_d,date_f,type,nom,reduction_offre,code_promo,reduction_promo,prix_offre
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()) {
+                Offre e = new Offre();
+                e.setId_offre(rs.getInt(1));
+                e.setDate_d(rs.getTimestamp(2));
+                e.setDate_f(rs.getTimestamp(3));
+                e.setType(rs.getString(4));
+                e.setNom(rs.getString(5));
+              //  e.setReduction_offre(rs.getFloat(6));
+              e.setCode_promo(rs.getString(6));
+              e.setReduction_promo(rs.getFloat(7));
+                e.setPrix_offre(rs.getFloat(8));
+             
+                list.add(e);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+
+    }
     public float CalculerPrixOffre(Offre o){
         Location l =new Location();
         float new_prix=0;

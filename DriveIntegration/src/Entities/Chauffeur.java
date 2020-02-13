@@ -11,8 +11,7 @@ package Entities;
  *
  * @author Belgaroui Ghazi
  */
-public class Chauffeur {
-    private int id_user;
+public class Chauffeur extends User {
     private String adresse;
     private int cin;
     private int permis;
@@ -23,8 +22,8 @@ public class Chauffeur {
     }
 
     
-    public Chauffeur( String adresse, int cin, int permis, String nom, String prenom) {
-       
+    public Chauffeur(int id_user,String login,String mdp,int etat,String mail, String adresse, int cin, int permis, String nom, String prenom) {
+        super(id_user,login,mdp,etat,mail);
         this.adresse = adresse;
         this.cin = cin;
         this.permis = permis;
@@ -56,12 +55,7 @@ public class Chauffeur {
     public int getPermis() {
         return permis;
     }
-
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
-    }
-
-    public void setAdresse(String adresse) {
+public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
 
@@ -83,7 +77,8 @@ public class Chauffeur {
 
     @Override
     public String toString() {
-        return "Chauffeur{" + "id_user=" + id_user + ", adresse=" + adresse + ", cin=" + cin + ", permis=" + permis + ", nom=" + nom + ", prenom=" + prenom + '}';
+        String u=super.toString();
+        return "Chauffeur{"+ u + ", adresse=" + adresse + ", cin=" + cin + ", permis=" + permis + ", nom=" + nom + ", prenom=" + prenom + '}';
     }
 
    
