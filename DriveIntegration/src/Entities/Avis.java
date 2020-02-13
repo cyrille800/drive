@@ -27,12 +27,28 @@ public class Avis {
      * @param msg
      * @param note
      */
-    public Avis(int id_avis, int id_chauffeur, int id_client, String msg, int note) {
+    public Avis(int id_avis, int chauffeur, int client, String msg, int note) {
         this.id_avis = id_avis;
-        this.id_chauffeur = id_chauffeur;
-        this.id_client = id_client;
+        this.id_chauffeur = chauffeur;
+        this.id_client = client;
         this.msg = msg;
         this.note = note;
+    }
+
+    public int getId_chauffeur() {
+        return id_chauffeur;
+    }
+
+    public void setId_chauffeur(int chauffeur) {
+        this.id_chauffeur = chauffeur;
+    }
+
+    public int getId_client() {
+        return id_client;
+    }
+
+    public void setId_client(int client) {
+        this.id_client = client;
     }
 
     
@@ -43,14 +59,7 @@ public class Avis {
         return id_avis;
     }
 
-    public int getId_chauffeur() {
-        return id_chauffeur;
-    }
-
-    public int getId_client() {
-        return id_client;
-    }
-
+ 
     public String getMsg() {
         return msg;
     }
@@ -63,13 +72,7 @@ public class Avis {
         this.id_avis = id_avis;
     }
 
-    public void setId_chauffeur(int id_chauffeur) {
-        this.id_chauffeur = id_chauffeur;
-    }
-
-    public void setId_client(int id_client) {
-        this.id_client = id_client;
-    }
+   
 
     public void setMsg(String msg) {
         this.msg = msg;
@@ -81,7 +84,7 @@ public class Avis {
 
     @Override
     public String toString() {
-        return "AvisC{" + "id_avis=" + id_avis + ", id_chauffeur=" + id_chauffeur + ", id_client=" + id_client + ", msg=" + msg + ", note=" + note + '}';
+        return "AvisC{" + "id_avis=" + id_avis +" , id_chauffeur = "+ id_chauffeur+", id_client = " + id_client  + ", msg=" + msg + ", note=" + note + '}';
     }
 
     public void setInt(int i, int id_chauffeur) {

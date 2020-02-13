@@ -11,28 +11,35 @@ package Entities;
  *
  * @author Belgaroui Ghazi
  */
-public class Chauffeur {
-    private int id_user;
+public class Chauffeur extends User {
     private String adresse;
     private int cin;
-    private int permis;
+    private String permis;
+    private String nom;
+    private String prenom;
 
     public Chauffeur() {
     }
 
     
-    public Chauffeur( String adresse, int cin, int permis) {
-       
+    public Chauffeur(User user, String adresse, int cin, String permis, String nom, String prenom) {
+        super(user.getId_user(),user.getN_tel(),user.getLogin(),user.getMdp(),user.getEtat(),user.getMail());
         this.adresse = adresse;
         this.cin = cin;
         this.permis = permis;
+        this.nom = nom;
+        this.prenom = prenom;
+
     }
 
-    public int getId_user() {
-        return id_user;
+    public String getNom() {
+        return nom;
     }
 
-    public String getAdresse() {
+    public String getPrenom() {
+        return prenom;
+    }
+     public String getAdresse() {
         return adresse;
     }
 
@@ -40,15 +47,10 @@ public class Chauffeur {
         return cin;
     }
 
-    public int getPermis() {
+    public String getPermis() {
         return permis;
     }
-
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
-    }
-
-    public void setAdresse(String adresse) {
+public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
 
@@ -56,14 +58,25 @@ public class Chauffeur {
         this.cin = cin;
     }
 
-    public void setPermis(int permis) {
+    public void setPermis(String permis) {
         this.permis = permis;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
     @Override
     public String toString() {
-        return "Chauffeur{" + "id_user=" + id_user + ", adresse=" + adresse + ", cin=" + cin + ", permis=" + permis + '}';
+        String u=super.toString();
+        return "Chauffeur{"+ u + ", adresse=" + adresse + ", cin=" + cin + ", permis=" + permis + ", nom=" + nom + ", prenom=" + prenom + '}';
     }
+
+   
    
     
 
