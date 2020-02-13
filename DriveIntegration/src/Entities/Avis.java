@@ -14,8 +14,8 @@ import Utils.Interval;
  */
 public class Avis {
     private int id_avis;
-    private Chauffeur chauffeur;
-    private Client client;
+    private int id_chauffeur;
+    private int id_client;
     private String msg;
     private int note;
 
@@ -27,28 +27,28 @@ public class Avis {
      * @param msg
      * @param note
      */
-    public Avis(int id_avis, Chauffeur chauffeur, Client client, String msg, int note) {
+    public Avis(int id_avis, int chauffeur, int client, String msg, int note) {
         this.id_avis = id_avis;
-        this.chauffeur = chauffeur;
-        this.client = client;
+        this.id_chauffeur = chauffeur;
+        this.id_client = client;
         this.msg = msg;
         this.note = note;
     }
 
-    public Chauffeur getChauffeur() {
-        return chauffeur;
+    public int getId_chauffeur() {
+        return id_chauffeur;
     }
 
-    public void setChauffeur(Chauffeur chauffeur) {
-        this.chauffeur = chauffeur;
+    public void setId_chauffeur(int chauffeur) {
+        this.id_chauffeur = chauffeur;
     }
 
-    public Client getClient() {
-        return client;
+    public int getId_client() {
+        return id_client;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setId_client(int client) {
+        this.id_client = client;
     }
 
     
@@ -84,7 +84,7 @@ public class Avis {
 
     @Override
     public String toString() {
-        return "AvisC{" + "id_avis=" + id_avis + getChauffeur().toString() + getClient().toString()  + ", msg=" + msg + ", note=" + note + '}';
+        return "AvisC{" + "id_avis=" + id_avis +" , id_chauffeur = "+ id_chauffeur+", id_client = " + id_client  + ", msg=" + msg + ", note=" + note + '}';
     }
 
     public void setInt(int i, int id_chauffeur) {
