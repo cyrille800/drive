@@ -8,6 +8,7 @@ package Test;
 import Core.AvisC;
 import Core.ReclamationC;
 import Entities.Avis;
+import Entities.Reclamation;
 import Utils.DataSource;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -31,16 +32,19 @@ public class AvisetReclamation {
           Timestamp timestamp1=new java.sql.Timestamp(parsedDate.getTime());
          
           
-                  Avis a = new Avis (1,1,2,"mnayek",20);
+                  Avis a = new Avis (1,1,2,"OHOH",22);
+                  
    AvisC ps = new AvisC();
-       // Reclamation r = new Reclamation (2,1,"perte de velo","mon velo a ete voler ce soir ",1,timestamp1);
+   ps.ajouterAvis(a);
+ //    Reclamation r = new Reclamation (2,1,"perte de velo","mon velo a ete voler ce soir ",1,timestamp1);
    ReclamationC p= new ReclamationC();
-  //System.out.println( ps.RechercheAvance("33"));
-  System.out.println( p.RechercheAvance("perte"));
-  // ps.modifierAvis(1, "oooooooooooooooo", 13);
+  System.out.println( ps.RechercheAvance("33"));
+  //System.out.println( p.RechercheAvance("perte"));
+   ps.modifierAvis(2, "msg","osket");
+   
   // p.modifierReclamation(4, "modif", "mofffff");
    //ps.supprimerAvis(1);
-   //p.ajouterReclamation(r);
+  // p.ajouterReclamation(r);
   // System.out.println(p.afficher());
       // System.out.println(ps.afficher());
       //  p.supprimerReclamation(7);
