@@ -6,7 +6,9 @@
 package Core;
 
 import Entities.Reclamation;
+import Utils.Criteres;
 import Utils.DataSource;
+import Utils.Interval;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +26,25 @@ import java.util.logging.Logger;
  */
 public class ReclamationC {
        Connection cn =DataSource.getInstance().getConnexion();
+       
+       
+          public Reclamation recupereResultat(ResultSet rs){
+         Reclamation a = new Reclamation();
+           try {
+               a.setId_rec(rs.getInt(1));
+               a.setSujet_rec(rs.getString(2));
+                a.setMsg(rs.getString(3));
+                a.setEtat(rs.getInt(4));
+                a.setDateAjout(rs.getTimestamp(5));
+                a.setId_client(rs.getInt(6));
+           } catch (SQLException ex) {
+               Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
+           }
+
+                 
+                
+                return a;
+   }
    public void ajouterReclamation(Reclamation r){
           String requete ="insert into reclamation(id_client,sujet_rec,msg,etat,dateAjout) values (?,?,?,?,?) ";
         try {
@@ -47,14 +68,7 @@ public class ReclamationC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                Reclamation a = new Reclamation();
-                a.setId_rec(rs.getInt(1));
-                a.setSujet_rec(rs.getString(2));
-                a.setMsg(rs.getString(3));
-                a.setEtat(rs.getInt(4));
-                a.setDateAjout(rs.getTimestamp(5));
-                a.setId_client(rs.getInt(6));
-                list.add(a);
+                list.add(recupereResultat(rs));
             }
         }
          catch (SQLException ex) {
@@ -88,4 +102,73 @@ public class ReclamationC {
         }
            
      }
+      
+      
+  public List<Reclamation> filtrerParInterval(Interval listeInterval){
+        
+     
+     List<Reclamation> list =new ArrayList<>();
+          String requete = Utils.FonctionsPartages.genererRequetteInterval("reclamation", listeInterval.getListeListeInterval());
+        try {
+            Statement st = cn.createStatement();
+            
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+                list.add(recupereResultat(rs));
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return list;
+     }
+   
+   public List<Reclamation> filterSelonDesCritere(Criteres critere){
+   List<Reclamation> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteTrie("reclamation",critere.getListeCritere());
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+
+   public List<Reclamation> trier(String ordre,String champs){
+   List<Reclamation> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"reclamation",champs);
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+            list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+    
+    /**
+     *
+     * @param critere
+     * @return
+     */
+ 
+
+      
 }
