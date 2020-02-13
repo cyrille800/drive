@@ -37,6 +37,23 @@ public class FonctionsPartages {
         public static float calculerPrixParraportAuTemps(float prixDuneHeure,int seconde){
         return ((float) seconde/3600)*prixDuneHeure;
         }
+        
+        public static List<String> retournerListeChamp(String table){
+         List<String> list=new ArrayList<>();
+          String requette="SELECT column_name FROM information_schema.columns WHERE table_name = '"+table+"' AND table_schema='drive'";
+     Statement st;
+         try {
+             st = cn.createStatement();
+                         ResultSet rs = st.executeQuery(requette);
+            while (rs.next()){
+               list.add(rs.getString(1));
+            }
+         } catch (SQLException ex) {
+             Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         
+         return list;
+        }
               public static boolean verifierSiChampExistant(String table,String champs){
      String requette="SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME LIKE '"+champs+"'";
      Statement st;
@@ -52,6 +69,50 @@ public class FonctionsPartages {
          }
      return false;
      }
+              
+           public static boolean verifierValeurDunChampsExistant(String table,String champs,Object value){
+               
+               if(verifierSiTableExistant(table)){
+                  if(verifierSiChampExistant(table, champs)){
+                      String requette = "select * from "+table+" where "+champs+"=?";
+                      
+                      try {
+            PreparedStatement pt= cn.prepareStatement(requette);
+            
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            ResultSet rs = pt.executeQuery();// trajaa base de donnee huh
+            while (rs.next()){
+               return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                  }else{
+                    System.out.println("le champs n'existe pas");  
+                  }
+               }else{
+                   System.out.println("la table n'existe pas");
+               }
+               
+               return false;
+           }
               
               public static boolean verifierSiTableExistant(String table){
      String requette="SHOW TABLES LIKE '"+table+"'";
@@ -110,6 +171,20 @@ public class FonctionsPartages {
 Pattern p = Pattern.compile(regex);
 Matcher matcher = p.matcher(email);
      return matcher.matches();
+     }
+     
+     public static boolean verifierCin(int numero){
+    String regex = "[0-9]{8}";
+    Pattern p = Pattern.compile(regex);
+    Matcher matcher = p.matcher(Integer.toString(numero));
+     return matcher.matches();
+     }
+     
+     public static boolean verifierPermis(String permis){
+           String regex = "[0-9]{2}/[0-9]{6}";
+            Pattern pk = Pattern.compile(regex);
+    Matcher matcher = pk.matcher(permis);
+        return matcher.matches();
      }
 
      public static boolean verifierDate(String date){
@@ -175,7 +250,7 @@ Matcher matcher = p.matcher(date);
    if(listeInterval.keySet().size()!=0){
    requete+=" where ";
    }
-   int taille;
+  // int taille;
    int j=1;
    int taille1=listeInterval.keySet().size();
    for(String cle : listeInterval.keySet()){
@@ -222,5 +297,28 @@ Matcher matcher = p.matcher(date);
        
        return "";
        
+   }
+   
+   public static String genererRequetteRechercherAvancer(String table,String el){
+       List<String> list=new ArrayList<>();
+       list=retournerListeChamp(table);
+       String requette= "select * from "+table;
+       int length=list.size();
+       if(length!=0){
+       requette+=" where ";
+       }
+       int i=1;
+       for(String tmp : list){
+           if(i==1){
+           
+           }
+           requette+=tmp+" like '%"+el+"%'";
+           i++;
+           if(i<=length){
+           requette+=" or ";
+           }
+       }
+       
+       return requette;
    }
 }
