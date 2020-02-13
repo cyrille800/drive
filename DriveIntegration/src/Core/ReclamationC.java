@@ -168,7 +168,25 @@ public class ReclamationC {
      * @param critere
      * @return
      */
- 
+ public List<Reclamation> RechercheAvance(String mot){
+   List<Reclamation> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("reclamation",mot);
+       System.out.println(requete);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
 
       
 }

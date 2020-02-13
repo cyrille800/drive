@@ -5,7 +5,9 @@
  */
 package Core;
 import Entities.Velo;
+import Utils.Criteres;
 import Utils.DataSource;
+import Utils.Interval;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +25,22 @@ import java.util.logging.Logger;
 public class VeloC {
     
     Connection cn =DataSource.getInstance().getConnexion();
+     public Velo recupereResultat(ResultSet rs){
+                Velo p = new Velo();
+         try {
+             p.setId(rs.getInt(1));
+                p.setType(rs.getString(2));
+                p.setAdresse(rs.getString(3));
+                p.setQte(rs.getInt(4));
+                p.setPhoto(rs.getString(5));
+                p.setPrix(rs.getFloat(6));
+         } catch (SQLException ex) {
+             Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return p;
+   }
    public void ajouterVelo(Velo p){
           String requete ="insert into velo(type,adresse,qte,photo,prix) values (?,?,?,?,?) "; // précomplier
         try {
@@ -46,14 +64,8 @@ public class VeloC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                Velo p = new Velo();
-                p.setId(rs.getInt(1));
-                p.setType(rs.getString(2));
-                p.setAdresse(rs.getString(3));
-                p.setQte(rs.getInt(4));
-                p.setPhoto(rs.getString(5));
-                p.setPrix(rs.getFloat(6));
-                list.add(p);
+              
+                list.add(recupereResultat(rs));
             }
         }
          catch (SQLException ex) {
@@ -119,4 +131,79 @@ public class VeloC {
         }
            return list;
      }
+       public List<Velo> filtrerParInterval(Interval listeInterval){
+        
+     
+     List<Velo> list =new ArrayList<>();
+          String requete = Utils.FonctionsPartages.genererRequetteInterval("velo", listeInterval.getListeListeInterval());
+        try {
+            Statement st = cn.createStatement();
+            
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+                list.add(recupereResultat(rs));
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return list;
+     }
+         public List<Velo> filterSelonDesCritere(Criteres critere){
+   List<Velo> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteTrie("velo",critere.getListeCritere());
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+         public List<Velo> trier(String ordre,String champs){
+   List<Velo> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"velo",champs);
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+            list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+          public List<Velo> RechercheAvance(String mot){
+   List<Velo> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("velo",mot);
+  
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
 }

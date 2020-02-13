@@ -38,6 +38,7 @@ public class Offre {
         this.reduction_promo = reduction_promo;
         this.prix_offre = prix_offre;
     }
+    
 
     public Offre(Timestamp date_d, Timestamp date_f, String type, String nom, String code_promo, float reduction_promo, float prix_offre) {
         this.date_d = date_d;
@@ -135,7 +136,12 @@ public class Offre {
 
     @Override
     public String toString() {
-        return "Offre{" + "id_offre=" + id_offre + ", date_d=" + date_d + ", date_f=" + date_f + ", type=" + type + ", nom=" + nom + ", reduction_offre=" + reduction_offre + ", code_promo=" + code_promo + ", reduction_promo=" + reduction_promo + ", prix_offre=" + prix_offre + '}';
-    }
+        String chaine="{ id : "+ id_offre +" ,date debut : "+ date_d+ " ,date Fin : "+ date_f+ " ,type : "+type+" ,nom : "+nom;
+    if (code_promo!= null){
+            chaine +=", code_promo=" + code_promo + ", reduction_promo=" + reduction_promo;
+        }else{
+            chaine +=", reduction_offre=" + reduction_offre +  ", prix_offre=" + prix_offre + '}';
+        }
+        return chaine;  }
 
 }
