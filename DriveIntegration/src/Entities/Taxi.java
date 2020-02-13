@@ -11,7 +11,7 @@ package Entities;
  */
 public class Taxi {
         private int id_taxi;
-        private int id_chauffeur;
+        private Chauffeur chauffeur;
         private String photo;
         private String num_chassis;
 
@@ -19,8 +19,8 @@ public Taxi()
 {
 }
 
-    public Taxi(int id_chauffeur, String photo,String num_chassis) {
-        this.id_chauffeur = id_chauffeur;
+    public Taxi(Chauffeur chauffeur, String photo,String num_chassis) {
+        this.chauffeur = chauffeur;
         this.photo = photo;
         this.num_chassis=num_chassis;
     }
@@ -34,8 +34,8 @@ public Taxi()
         return id_taxi;
     }
 
-    public int getId_chauffeur() {
-        return id_chauffeur;
+    public Chauffeur getChauffeur() {
+        return chauffeur;
     }
 
     public String getPhoto() {
@@ -46,8 +46,8 @@ public Taxi()
         this.id_taxi = id_taxi;
     }
 
-    public void setId_chauffeur(int id_chauffeur) {
-        this.id_chauffeur = id_chauffeur;
+    public void setChauffeur( Chauffeur chauffeur) {
+        this.chauffeur = chauffeur;
     }
 
     public void setPhoto(String photo) {
@@ -60,7 +60,7 @@ public Taxi()
 
     @Override
     public String toString() {
-        return "Taxi{" + "id_taxi=" + id_taxi + ", id_chauffeur=" + id_chauffeur + ", photo=" + photo + ", num_chassis=" + num_chassis + '}';
+        return "Taxi{" + "id_taxi=" + id_taxi + ", " + chauffeur.toString() + ", photo=" + photo + ", num_chassis=" + num_chassis + '}';
     }
     
     

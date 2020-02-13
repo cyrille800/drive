@@ -10,12 +10,15 @@ import Entities.Chauffeur;
 import Entities.Taxi;
 import Utils.Criteres;
 import Utils.DataSource;
+import Utils.FonctionsPartages;
 import Utils.Interval;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,7 +34,8 @@ public class TaxiC {
                 Taxi p = new Taxi();
          try {
                 p.setId_taxi(rs.getInt(1));
-                p.setId_chauffeur(rs.getInt(2));
+                ChauffeurC ch=new ChauffeurC();
+                p.setChauffeur(ch.retournerChauffeur(rs.getInt(2)));
                 p.setPhoto(rs.getString(3));
                 p.setNum_chassis(rs.getString(4));
          } catch (SQLException ex) {
@@ -45,19 +49,23 @@ public class TaxiC {
        
        if(t.getNum_chassis().length()==13)
        {
-       String requete ="insert into taxi(id_chauffeur,photo,num_chassis) values (?,?,?) ";
+           if(FonctionsPartages.verifierValeurDunChampsExistant("taxi", "num_chassis", t.getNum_chassis())==false && FonctionsPartages.verifierValeurDunChampsExistant("taxi", "id_chauffeur", t.getChauffeur().getId_user())==false){
+        String requete ="insert into taxi(id_chauffeur,photo,num_chassis) values (?,?,?) ";
         try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
-            pst.setInt(1,t.getId_chauffeur());
+            pst.setInt(1,t.getChauffeur().getId_user());
             pst.setString(2,t.getPhoto());
             pst.setString(3,t.getNum_chassis());
             pst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(TaxiC.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }          
+           }else{
+               System.out.println("le numero de chassi ou bien le chauffeur possede deja une voiture");
+           }
        }else{
-           System.out.println("erreur de saisie");
+           System.out.println("num chassi incorrect de saisie");
        }
         
          
@@ -79,49 +87,44 @@ public class TaxiC {
         return list;
            
     }
-  public List<Taxi> rechercher(String photo)
-     {
-         List<Taxi> list= new ArrayList<>();
-           try {
-            PreparedStatement pt=cn.prepareStatement("select * from taxi where num_chassis=?");
-            pt.setString(1,photo);
-            ResultSet rs= pt.executeQuery();
-            int i=0;
-            while (rs.next()){
-                Taxi p = new Taxi();
-                p.setId_taxi(rs.getInt(1));
-                p.setId_chauffeur(rs.getInt(2));
-                p.setPhoto(rs.getString(3));
-                p.setNum_chassis(rs.getString(4));
-                list.add(p);
-                i++;
-            }
-            
-            if(i==0) {System.out.println("aucune reponse");}
-            else{System.out.println("voila");}
-               
-            
-          } catch (SQLException ex) {
-            Logger.getLogger(TaxiC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-           return list;
-     }
     
-     public void modifierTaxi(int id_taxi,int id_chauffeur,String photo,String num_chassis) {
-       
-       String   requete = "update taxi set id_chauffeur=?,photo=?,num_chassis=?  where id_taxi=?";
-         try {
+       public boolean modifierTaxi(int id,String champs,Object value){
+    String   requete = "update taxi set "+champs+"=?  where id_taxi=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("taxi","id_taxi",id)==true && FonctionsPartages.verifierSiChampExistant("taxi",champs)==true){
+       try {
             PreparedStatement pt= cn.prepareStatement(requete);
             
-            pt.setInt(1,id_chauffeur);
-            pt.setString(2,photo);
-            pt.setString(3,num_chassis);
-            pt.setInt(4,id_taxi);
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(TaxiC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+            Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+       }else{
+             System.out.println("le champs ou l'identifiant est incorrect");
+         }
+       
+       return false;
+   }
+       
       public void supprimerTaxi( int id)
      {
            try {
@@ -209,5 +212,20 @@ public class TaxiC {
     }
    
    return list;
+   }
+
+      public Taxi retournerTaxi(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from taxi where id_taxi=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
    }
 }

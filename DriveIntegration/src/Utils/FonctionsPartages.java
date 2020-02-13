@@ -70,6 +70,50 @@ public class FonctionsPartages {
      return false;
      }
               
+           public static boolean verifierValeurDunChampsExistant(String table,String champs,Object value){
+               
+               if(verifierSiTableExistant(table)){
+                  if(verifierSiChampExistant(table, champs)){
+                      String requette = "select * from "+table+" where "+champs+"=?";
+                      
+                      try {
+            PreparedStatement pt= cn.prepareStatement(requette);
+            
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            ResultSet rs = pt.executeQuery();// trajaa base de donnee huh
+            while (rs.next()){
+               return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                  }else{
+                    System.out.println("le champs n'existe pas");  
+                  }
+               }else{
+                   System.out.println("la table n'existe pas");
+               }
+               
+               return false;
+           }
+              
               public static boolean verifierSiTableExistant(String table){
      String requette="SHOW TABLES LIKE '"+table+"'";
      Statement st;
@@ -136,7 +180,7 @@ Matcher matcher = p.matcher(email);
      return matcher.matches();
      }
      
-     public static boolean verifierCin(String permis){
+     public static boolean verifierPermis(String permis){
            String regex = "[0-9]{2}/[0-9]{6}";
             Pattern pk = Pattern.compile(regex);
     Matcher matcher = pk.matcher(permis);
