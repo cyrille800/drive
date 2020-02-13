@@ -25,7 +25,6 @@ import java.util.logging.Logger;
  * @author Belgaroui Ghazi
  */
 public class LocationVelo {
-    public static void main(String[] args) {
    
    
     public static void startConsole(){
@@ -98,5 +97,5 @@ public class LocationVelo {
  
           
     }
-}
+
  }

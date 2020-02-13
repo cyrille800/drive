@@ -14,7 +14,7 @@ package Entities;
 public class Chauffeur extends User {
     private String adresse;
     private int cin;
-    private int permis;
+    private String permis;
     private String nom;
     private String prenom;
 
@@ -22,7 +22,7 @@ public class Chauffeur extends User {
     }
 
     
-    public Chauffeur(int id_user,String login,String mdp,int etat,String mail, String adresse, int cin, int permis, String nom, String prenom) {
+    public Chauffeur(int id_user,String login,String mdp,int etat,String mail, String adresse, int cin, String permis, String nom, String prenom) {
         super(id_user,login,mdp,etat,mail);
         this.adresse = adresse;
         this.cin = cin;
@@ -52,7 +52,7 @@ public class Chauffeur extends User {
         return cin;
     }
 
-    public int getPermis() {
+    public String getPermis() {
         return permis;
     }
 public void setAdresse(String adresse) {
@@ -63,7 +63,7 @@ public void setAdresse(String adresse) {
         this.cin = cin;
     }
 
-    public void setPermis(int permis) {
+    public void setPermis(String permis) {
         this.permis = permis;
     }
 
