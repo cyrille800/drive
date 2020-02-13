@@ -19,7 +19,7 @@ import Utils.Interval;
  */
 public class ChauffeurTaxi {
     
-    public static void StartConsole(){
+    public static void startConsole(){
          DataSource ds =  DataSource.getInstance();
           System.out.println(ds.hashCode());
         
