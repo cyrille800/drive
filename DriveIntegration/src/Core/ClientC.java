@@ -6,6 +6,7 @@
 package Core;
 
 import Entities.Client;
+import Entities.User;
 import Utils.DataSource;
 import Utils.FonctionsPartages;
 import java.sql.Connection;
@@ -26,6 +27,27 @@ import java.util.logging.Logger;
  */
 public class ClientC {
     
+       public Client recupereResultat(ResultSet rs){
+                Client p = new Client();
+         try {
+                p.setId_user(rs.getInt(1));
+             UserC us= new UserC();
+             User user= us.retournerUser(rs.getInt(1));
+              p.setN_tel(user.getN_tel());
+                p.setLogin(user.getLogin());
+                p.setMdp(user.getMdp());
+                p.setEtat(user.getEtat());
+                p.setMail(user.getMail());
+                
+                p.setNbr_res_annulee(rs.getInt(2));
+                
+         } catch (SQLException ex) {
+             Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return p;
+   }
             public boolean modifierReservation(int id,String champs,Object value){
     String   requete = "update client set "+champs+"=?  where id_user=?";
          if(FonctionsPartages.verifierExistanteDuneValeur("client","id_user",id)==true && FonctionsPartages.verifierSiChampExistant("client",champs)==true){
@@ -85,15 +107,7 @@ public class ClientC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                Client p = new Client();
-                p.setId_user(rs.getInt(1));
-                p.setNbr_res_annulee(rs.getInt(2));
-                p.setN_tel(rs.getInt(4));
-                p.setLogin(rs.getString(5));
-                p.setMdp(rs.getString(6));
-                p.setEtat(rs.getInt(7));
-                p.setMail(rs.getString(8));
-                list.add(p);
+                list.add(recupereResultat(rs));
             }
         }
          catch (SQLException ex) {
@@ -117,4 +131,19 @@ public class ClientC {
         }
            
      }
+      
+       public Client retournerClient(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from client where id_user=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
+   }
 }
