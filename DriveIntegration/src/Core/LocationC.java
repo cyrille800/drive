@@ -183,5 +183,23 @@ public class LocationC {
    
    return list;
    }
-     
+     public List<Location> RechercheAvance(String mot){
+   List<Location> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("location",mot);
+  
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   } 
 }
