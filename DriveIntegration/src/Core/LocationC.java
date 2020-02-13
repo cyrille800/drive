@@ -34,8 +34,10 @@ public class LocationC {
                 Location p = new Location();
          try {
              p.setId_location(rs.getInt(1));
-                p.setId_client(rs.getInt(2));
-                p.setId_velo(rs.getInt(3));
+             ClientC us=new ClientC();
+             VeloC vs=new VeloC();
+                p.setClient(us.retournerClient(rs.getInt(2)));
+                p.setVelo(vs.retournerVelo(rs.getInt(3)));
                 p.setDate_d(rs.getTimestamp(4));
                 p.setDate_f(rs.getTimestamp(5));
                 p.setPrix(rs.getFloat(6));
@@ -48,13 +50,14 @@ public class LocationC {
    }
        
    public void ajouterLocation(Location p){
-         String requete ="select prix from velo where id=? limit 1";
+       if(Utils.FonctionsPartages.verifierExistanteDuneValeur("location", "id_velo", p.getVelo().getId())==false && Utils.FonctionsPartages.verifierExistanteDuneValeur("location", "id_client", p.getClient().getId_user())==false){
+           String requete ="select prix from velo where id=? limit 1";
        PreparedStatement pt1;
        float prix=0;
           
        try {
                pt1 = cn.prepareStatement(requete);
-               pt1.setInt(1,p.getId_velo());
+               pt1.setInt(1,p.getVelo().getId());
             ResultSet rs= pt1.executeQuery();
             while (rs.next()){
                 float prixLocal=rs.getFloat(1);
@@ -70,8 +73,8 @@ public class LocationC {
             
           
           PreparedStatement pst = cn.prepareStatement(requete);
-            pst.setInt(1,p.getId_client());
-            pst.setInt(2,p.getId_velo());
+            pst.setInt(1,p.getClient().getId_user());
+            pst.setInt(2,p.getVelo().getId());
             pst.setTimestamp(3,(Timestamp) p.getDate_d());
             pst.setTimestamp(4,(Timestamp) p.getDate_f());
             pst.setFloat(5,prix);
@@ -79,6 +82,10 @@ public class LocationC {
         } catch (SQLException ex) {
             Logger.getLogger(LocationC.class.getName()).log(Level.SEVERE, null, ex);
         }
+       }else{
+           System.out.println("le client a deja effectuer une location ou bien le velo est deja loue");
+       }
+         
          
     }
     public List<Location> afficher(){
@@ -222,4 +229,19 @@ public class LocationC {
    
    return list;
    } 
+     
+       public Location retournerLocation(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from location where id_location=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
+   }
 }
