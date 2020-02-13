@@ -20,42 +20,33 @@ public class Offre {
     private String nom;
     private float reduction_offre;
     private String code_promo;
-    private float reduction_promo;
-    private float prix_offre;
+
+    
     
    
 
     public Offre() {
     }
 
-    public Offre(Timestamp date_d, Timestamp date_f, String type, String nom, float reduction_offre, String code_promo, float reduction_promo, float prix_offre) {
+    public Offre(Timestamp date_d, Timestamp date_f, String type, String nom, float reduction_offre, String code_promo) {
         this.date_d = date_d;
         this.date_f = date_f;
         this.type = type;
         this.nom = nom;
         this.reduction_offre = reduction_offre;
         this.code_promo = code_promo;
-        this.reduction_promo = reduction_promo;
-        this.prix_offre = prix_offre;
+  
+  
     }
 
-    public Offre(Timestamp date_d, Timestamp date_f, String type, String nom, String code_promo, float reduction_promo, float prix_offre) {
-        this.date_d = date_d;
-        this.date_f = date_f;
-        this.type = type;
-        this.nom = nom;
-        this.code_promo = code_promo;
-        this.reduction_promo = reduction_promo;
-        this.prix_offre = prix_offre;
-    }
 
-    public Offre(Timestamp date_d, Timestamp date_f, String type, String nom, float reduction_offre, float prix_offre) {
+    public Offre(Timestamp date_d, Timestamp date_f, String type, String nom, float reduction_offre ) {
         this.date_d = date_d;
         this.date_f = date_f;
         this.type = type;
         this.nom = nom;
         this.reduction_offre = reduction_offre;
-        this.prix_offre = prix_offre;
+        
     }
 
     public String getNom() {
@@ -68,13 +59,6 @@ public class Offre {
 
   
 
-    public float getPrix_offre() {
-        return prix_offre;
-    }
-
-    public void setPrix_offre(float prix_offre) {
-        this.prix_offre = prix_offre;
-    }
 
     public int getId_offre() {
         return id_offre;
@@ -125,22 +109,15 @@ public class Offre {
         this.code_promo = code_promo;
     }
 
-    public float getReduction_promo() {
-        return reduction_promo;
-    }
-
-    public void setReduction_promo(float reduction_promo) {
-        this.reduction_promo = reduction_promo;
-    }
-
+  
     @Override
     public String toString() {
-        String chaine="{ id  "+ id_offre +" ,date debut : "+ date_d+ " ,date Fin : "+ date_f+ " ,type : "+type+" ,nom : "+nom;
+        String chaine="{ id : "+ id_offre +" ,date debut : "+ date_d+ " ,date Fin : "+ date_f+ " ,type : "+type+" ,nom : "+nom;
     if (code_promo!= null){
-            chaine +=", code_promo=" + code_promo + ", reduction_promo=" + reduction_promo;
-        }else{
-            chaine +=", reduction_offre=" + reduction_offre +  ", prix_offre=" + prix_offre + '}';
+            chaine +=", code_promo=" + code_promo ;
         }
+            chaine +=", reduction_offre=" + reduction_offre +  " '}'";
+        
         return chaine;  }
 
 }

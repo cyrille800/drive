@@ -7,14 +7,18 @@ package Core;
 
 
 import Entities.Chauffeur;
+import Entities.User;
 import Utils.Criteres;
 import Utils.DataSource;
+import Utils.FonctionsPartages;
 import Utils.Interval;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,9 +35,16 @@ public class ChauffeurC  {
                 Chauffeur p = new Chauffeur();
          try {
              p.setId_user(rs.getInt(1));
+             UserC us= new UserC();
+             User user= us.retournerUser(rs.getInt(1));
+             p.setN_tel(user.getN_tel());
+             p.setLogin(user.getLogin());
+             p.setMail(user.getMail());
+             p.setEtat(user.getEtat());
+             p.setMdp(user.getMdp());
              p.setAdresse(rs.getString(2));
              p.setCin(rs.getInt(3));
-             p.setPermis(rs.getInt(4));
+             p.setPermis(rs.getString(4));
              p.setNom(rs.getString(5));
              p.setPrenom(rs.getString(6));
          } catch (SQLException ex) {
@@ -44,23 +55,31 @@ public class ChauffeurC  {
                 return p;
    }
    public void ajouterChauffeur(Chauffeur p){
-       if(Utils.FonctionsPartages.verifierCin(p.getCin())){
-        String requete ="insert into chauffeur(adresse,cin,permis,nom,prenom) values (?,?,?,?,?) ";
+       if(Utils.FonctionsPartages.verifierCin(p.getCin())==true && Utils.FonctionsPartages.verifierPermis(p.getPermis())==true){
+        
+           if(FonctionsPartages.verifierValeurDunChampsExistant("chauffeur", "cin", p.getCin())==false && FonctionsPartages.verifierValeurDunChampsExistant("chauffeur", "permis", p.getPermis())==false){
+          String requete ="insert into chauffeur(id_user,adresse,cin,permis,nom,prenom) values (?,?,?,?,?,?) ";
         try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
-            pst.setString(1,p.getAdresse());
-            pst.setInt(2,p.getCin());
-            pst.setInt(3,p.getPermis());
-            pst.setString(4,p.getNom());
-            pst.setString(5,p.getPrenom());
+            pst.setInt(1,p.getId_user());
+            pst.setString(2,p.getAdresse());
+            pst.setInt(3,p.getCin());
+            pst.setString(4,p.getPermis());
+            pst.setString(5,p.getNom());
+            pst.setString(6,p.getPrenom());
             pst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }      
+           }else{
+               System.out.println("le chauffeur doit etre unique");
+           }
+           
+          
        }else{
            
-           System.out.println("cin incorrect");
+           System.out.println("cin ou permis incorrect");
            
        }
          
@@ -73,8 +92,6 @@ public class ChauffeurC  {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                
-
               list.add(recupereResultat(rs));
             }
         }
@@ -84,29 +101,52 @@ public class ChauffeurC  {
         return list;
            
     }
-     public void modifierChauffeur(int id_user,String adresse,int cin,int permis,String nom,String prenom) {
-       
-       String   requete = "update chauffeur set adresse=?,cin=?,permis=?,nom=?,prenom=?  where id_user=?";
-         try {
+
+       public boolean modifierChauffeur(int id,String champs,Object value){
+    String   requete = "update chauffeur set "+champs+"=?  where id_user=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("chauffeur","id_user",id)==true && FonctionsPartages.verifierSiChampExistant("chauffeur",champs)==true){
+       try {
             PreparedStatement pt= cn.prepareStatement(requete);
             
-            pt.setString(1,adresse);
-            pt.setInt(2,cin);
-            pt.setInt(3, permis);
-            pt.setString(4,nom);
-            pt.setString(5,prenom);
-            pt.setInt(4, id_user);
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+                 System.out.println("tyut");
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+            Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+       }else{
+             System.out.println("le champs ou l'identifiant est incorrect");
+         }
+       
+       return false;
+   }
       public void supprimerChauffeur( int id)
      {
            try {
             PreparedStatement pt=cn.prepareStatement("delete from chauffeur where id_user=?");
            pt.setInt(1,id);
             pt.executeUpdate();
+            UserC us=new UserC();
+            us.supprimerUser(id);
         } catch (SQLException ex) {
             Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -169,6 +209,40 @@ public class ChauffeurC  {
     }
    
    return list;
+   }
+    public List<Chauffeur> RechercheAvance(String mot){
+   List<Chauffeur> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("chauffeur",mot);
+       System.out.println(requete);
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+    
+   public Chauffeur retournerChauffeur(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from chauffeur where id_user=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
    }
       
 }

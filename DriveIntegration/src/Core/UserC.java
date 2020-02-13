@@ -85,9 +85,12 @@ public class UserC {
    }
              
              
-   public void ajouterUser(User p){
-       if(FonctionsPartages.verifierAdresseMail(p.getMail())){
-           if(FonctionsPartages.verifierNumeroPhone( Integer.toString(p.getN_tel()) )){
+   public int ajouterUser(User p){
+       if(FonctionsPartages.verifierAdresseMail(p.getMail()) && FonctionsPartages.verifierNumeroPhone(String.valueOf(p.getN_tel()))){
+           
+           if(FonctionsPartages.verifierValeurDunChampsExistant("user", "n_tel", p.getN_tel())==false && FonctionsPartages.verifierValeurDunChampsExistant("user", "login", p.getLogin())==false && FonctionsPartages.verifierValeurDunChampsExistant("user", "mail", p.getMail())==false){
+                   
+           
             String requete ="insert into user (n_tel,login,mdp,etat,mail) values (?,?,?,?,?) "; // précomplier
        if(p.getEtat()<0 || p.getEtat()>3){
            System.out.println("l'etat doit etre compris entre 0 et 3");
@@ -101,18 +104,23 @@ public class UserC {
             pst.setInt(4,p.getEtat());
             pst.setString(5,p.getMail());
             pst.executeUpdate();
+            Criteres c= new Criteres();
+            c.ajouterCritere("login",p.getLogin());
+            UserC us=new UserC();
+            return us.filterSelonDesCritere(c).get(0).getId_user();
         } catch (SQLException ex) {
             Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
         }
        }
+           
            }else{
-               System.out.println("numero de telephone invali");
+               System.out.println("l'utilisateur doit etre unique");
            }
          
        }else{
-           System.out.println("adresse mail incorrect");
+           System.out.println("adresse mail ou numero incorrect");
        }
-         
+         return -1;
     }
     public List<User> afficher(){
           List<User> list =new ArrayList<>(); // array list Vectoc plus lent il ne pejut pas executer plusieurs en mm temps
@@ -220,5 +228,20 @@ public class UserC {
     }
    
    return list;
+   }
+   
+      public User retournerUser(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from user where id_user=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
    }
 }

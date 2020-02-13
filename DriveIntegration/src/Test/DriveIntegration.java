@@ -8,11 +8,9 @@ package Test;
 import Core.*;
 import Entities.*;
 import Utils.Criteres;
-import Utils.DataSource;
 import Utils.Interval;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -48,19 +46,19 @@ public class DriveIntegration {
                 
                     switch (choix) {
   case 1:
-    System.out.println("Monday");
+    Test.ClientReservation.startConsole();
     break;
   case 2:
-    System.out.println("Tuesday");
+    Test.ChauffeurTaxi.startConsole();
     break;
   case 3:
-    System.out.println("Wednesday");
+    Test.AvisetReclamation.startConsole();
     break;
   case 4:
-    System.out.println("Thursday");
+    Test.LocationVelo.startConsole();
     break;
   case 5:
-    System.out.println("Friday");
+    Test.OffreEvent.startConsole();
     break;
 }
                     
@@ -71,4 +69,5 @@ public class DriveIntegration {
       
 
     }
+
 }
