@@ -8,12 +8,15 @@ package Core;
 import Entities.Avis;
 import Utils.Criteres;
 import Utils.DataSource;
+import Utils.FonctionsPartages;
 import Utils.Interval;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -48,6 +51,7 @@ public class AvisC {
        
        
    public void ajouterAvis(Avis a){
+     if (20>a.getNote()){
           String requete ="insert into avis(id_chauffeur,id_client,msg,note) values (?,?,?,?) ";
         try {
           
@@ -60,8 +64,10 @@ public class AvisC {
         } catch (SQLException ex) {
             Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
-    }
+     }else {
+         System.out.println("la note devra etre inferieur a 20");
+     }
+   }
     public List<Avis> afficher(){
           List<Avis> list =new ArrayList<>(); // array list Vectoc plus lent il ne pejut pas executer plusieurs en mm temps
           String requete = "select * from avis";
@@ -79,21 +85,45 @@ public class AvisC {
         return list;
            
     }
-     public void modifierAvis(int id_avis,String msg ,int note) {
-       
-       String   requete = "update avis set msg=?,note=?   where id_avis=?";
-         try {
+  
+             public boolean modifierAvis(int id,String champs,Object value){
+    String   requete = "update avis set "+champs+"=?  where id_avis=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("avis","id_avis",id)==true && FonctionsPartages.verifierSiChampExistant("avis",champs)==true){
+       try {
             PreparedStatement pt= cn.prepareStatement(requete);
             
-            pt.setString(1,msg);
-            pt.setInt(2,note);
-            pt.setInt(3, id_avis);
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-      public void supprimerAvis( int id)
+        }  
+       }else{
+             System.out.println("le champs ou l'identifiant est incorrect");
+         }
+       
+       return false;
+   }
+             
+                public void supprimerAvis( int id)
      {
            try {
             PreparedStatement pt=cn.prepareStatement("delete from avis where id_avis=?");

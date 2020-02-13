@@ -8,8 +8,10 @@ package Core;
 import Entities.Reclamation;
 import Utils.Criteres;
 import Utils.DataSource;
+import Utils.FonctionsPartages;
 import Utils.Interval;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -77,20 +79,43 @@ public class ReclamationC {
         return list;
            
     }
-     public void modifierReclamation(int id_rec,String sujet_rec, String msg) {
-       
-       String   requete = "update reclamation set sujet_rec=?,msg=?   where id_rec=?";
-         try {
+     public boolean modifierAvis(int id,String champs,Object value){
+    String   requete = "update reclamation set "+champs+"=?  where id_rec=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("reclamation","id_rec",id)==true && FonctionsPartages.verifierSiChampExistant("reclamation",champs)==true){
+       try {
             PreparedStatement pt= cn.prepareStatement(requete);
             
-            pt.setString(1,sujet_rec);
-            pt.setString(2,msg);
-            pt.setInt(3, id_rec);
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+        }  
+       }else{
+             System.out.println("le champs ou l'identifiant est incorrect");
+         }
+       
+       return false;
+   }
+             
       public void supprimerReclamation( int id)
      {
            try {
