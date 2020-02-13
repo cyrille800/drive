@@ -37,6 +37,23 @@ public class FonctionsPartages {
         public static float calculerPrixParraportAuTemps(float prixDuneHeure,int seconde){
         return ((float) seconde/3600)*prixDuneHeure;
         }
+        
+        public static List<String> retournerListeChamp(String table){
+         List<String> list=new ArrayList<>();
+          String requette="SELECT column_name FROM information_schema.columns WHERE table_name = '"+table+"' AND table_schema='drive'";
+     Statement st;
+         try {
+             st = cn.createStatement();
+                         ResultSet rs = st.executeQuery(requette);
+            while (rs.next()){
+               list.add(rs.getString(1));
+            }
+         } catch (SQLException ex) {
+             Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         
+         return list;
+        }
               public static boolean verifierSiChampExistant(String table,String champs){
      String requette="SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME LIKE '"+champs+"'";
      Statement st;
@@ -222,5 +239,28 @@ Matcher matcher = p.matcher(date);
        
        return "";
        
+   }
+   
+   public static String genererRequetteRechercherAvancer(String table,String el){
+       List<String> list=new ArrayList<>();
+       list=retournerListeChamp(table);
+       String requette= "select * from "+table;
+       int length=list.size();
+       if(length!=0){
+       requette+=" where ";
+       }
+       int i=1;
+       for(String tmp : list){
+           if(i==1){
+           
+           }
+           requette+=tmp+" like '%"+el+"%'";
+           i++;
+           if(i<=length){
+           requette+=" or ";
+           }
+       }
+       
+       return requette;
    }
 }
