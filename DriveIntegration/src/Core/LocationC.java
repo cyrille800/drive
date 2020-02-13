@@ -7,7 +7,9 @@ package Core;
 
 import Entities.Location;
 import Entities.Velo;
+import Utils.Criteres;
 import Utils.DataSource;
+import Utils.Interval;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +28,22 @@ import java.util.logging.Logger;
  */
 public class LocationC {
        Connection cn =DataSource.getInstance().getConnexion();
-       
+       public Location recupereResultat(ResultSet rs){
+                Location p = new Location();
+         try {
+             p.setId_location(rs.getInt(1));
+                p.setId_client(rs.getInt(2));
+                p.setId_velo(rs.getInt(3));
+                p.setDate_d(rs.getTimestamp(4));
+                p.setDate_f(rs.getTimestamp(5));
+                p.setPrix(rs.getFloat(6));
+         } catch (SQLException ex) {
+             Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return p;
+   }
        
    public void ajouterLocation(Location p){
          String requete ="select prix from velo where id=? limit 1";
@@ -69,14 +86,9 @@ public class LocationC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                Location p = new Location();
-                p.setId_location(rs.getInt(1));
-                p.setId_client(rs.getInt(2));
-                p.setId_velo(rs.getInt(3));
-                p.setDate_d(rs.getTimestamp(4));
-                p.setDate_f(rs.getTimestamp(5));
-                p.setPrix(rs.getFloat(6));
-                list.add(p);
+                
+                
+                list.add(recupereResultat(rs));
             }
         }
          catch (SQLException ex) {
@@ -114,28 +126,62 @@ public class LocationC {
         }
            
      }
-    public List<Location> Trier(){
-          List<Location> list =new ArrayList<>(); // array list Vectoc plus lent il ne pejut pas executer plusieurs en mm temps
-          String requete = "select * from location ORDER BY prix ASC";
-        try {
+    
+     public List<Location> filterSelonDesCritere(Criteres critere){
+   List<Location> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteTrie("location",critere.getListeCritere());
+   
+   try {
             Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                Location p = new Location();
-                p.setId_location(rs.getInt(1));
-                p.setId_client(rs.getInt(2));
-                p.setId_velo(rs.getInt(3));
-                p.setDate_d(rs.getTimestamp(4));
-                p.setDate_f(rs.getTimestamp(5));
-                p.setPrix(rs.getFloat(6));
-                list.add(p);
+               list.add(recupereResultat(rs));
+            }
             }
         }
          catch (SQLException ex) {
-            Logger.getLogger(LocationC.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+       public List<Location> filtrerParInterval(Interval listeInterval){
+        
+     
+     List<Location> list =new ArrayList<>();
+          String requete = Utils.FonctionsPartages.genererRequetteInterval("location", listeInterval.getListeListeInterval());
+        try {
+            Statement st = cn.createStatement();
+            
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+                list.add(recupereResultat(rs));
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
     }
         return list;
-           
+     }
+       public List<Location> trier(String ordre,String champs){
+   List<Location> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"location",champs);
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+            list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
     }
+   
+   return list;
+   }
      
 }
