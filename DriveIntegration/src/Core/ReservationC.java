@@ -28,7 +28,33 @@ import java.util.logging.Logger;
  */
 public class ReservationC {
      Connection cn =DataSource.getInstance().getConnexion();
-     
+ 
+    public Reservation recupereResultat(ResultSet rs){
+                Reservation p = new Reservation();
+         try {
+             p.setId_reservation(rs.getInt(1));
+                p.setId_client(rs.getInt(2));
+                p.setId_chauffeur(rs.getInt(3));
+                p.setDepart(rs.getString(4));
+                p.setArrive(rs.getString(5));
+                p.setHeure(rs.getTimestamp(6));
+                p.setPrix(rs.getDouble(7));
+                p.setType_reservation(rs.getString(8));
+                
+                
+                if(p.getType_reservation().equals("livraison")){
+                p.setCode_liv(rs.getInt(9));
+                }
+                if(p.getType_reservation().equals("covoiturage")){
+                p.setNbr_place(rs.getInt(10));
+                }
+         } catch (SQLException ex) {
+             Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+         }
+                 
+                
+                return p;
+   }
         public boolean modifierReservation(int id,String champs,Object value){
     String   requete = "update reservation set "+champs+"=?  where id_reservation=?";
          if(FonctionsPartages.verifierExistanteDuneValeur("reservation","id_reservation",id)==true && FonctionsPartages.verifierSiChampExistant("reservation",champs)==true){
@@ -98,24 +124,7 @@ public class ReservationC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                Reservation p = new Reservation();
-                p.setId_reservation(rs.getInt(1));
-                p.setId_client(rs.getInt(2));
-                p.setId_chauffeur(rs.getInt(3));
-                p.setDepart(rs.getString(4));
-                p.setArrive(rs.getString(5));
-                p.setHeure(rs.getTimestamp(6));
-                p.setPrix(rs.getDouble(7));
-                p.setType_reservation(rs.getString(8));
-                
-                
-                if(p.getType_reservation().equals("livraison")){
-                p.setCode_liv(rs.getInt(9));
-                }
-                if(p.getType_reservation().equals("covoiturage")){
-                p.setNbr_place(rs.getInt(10));
-                }
-                list.add(p);
+                list.add(recupereResultat(rs));
             }
         }
          catch (SQLException ex) {
@@ -135,4 +144,19 @@ public class ReservationC {
         }
            
      }
+      
+        public Reservation retournerReservation(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from reservation where id_reservation=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
+   }
 }
