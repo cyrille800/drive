@@ -26,7 +26,7 @@ public class DriveIntegration {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
        int choix = -1;
          
          while(choix == 0 || (choix<0 || choix>5)){
