@@ -38,7 +38,8 @@ public class ReclamationC {
                 a.setMsg(rs.getString(3));
                 a.setEtat(rs.getInt(4));
                 a.setDateAjout(rs.getTimestamp(5));
-                a.setId_client(rs.getInt(6));
+             ClientC us=new ClientC();
+                a.setClient(us.retournerClient(rs.getInt(6)));
            } catch (SQLException ex) {
                Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
            }
@@ -52,7 +53,7 @@ public class ReclamationC {
         try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
-            pst.setInt(1,r.getId_client());
+            pst.setInt(1,r.getClient().getId_user());
             pst.setString(2,r.getSujet_rec());
             pst.setString(3,r.getMsg());
             pst.setInt(4,r.getEtat());
@@ -213,5 +214,19 @@ public class ReclamationC {
    return list;
    }
 
-      
+
+       public Reclamation retournerReclamation(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from reclamation where id_rec=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
+   }
 }
