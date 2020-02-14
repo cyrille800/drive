@@ -6,6 +6,7 @@
 package Core;
 
 import Entities.Avis;
+import Entities.Reservation;
 import Utils.Criteres;
 import Utils.DataSource;
 import Utils.FonctionsPartages;
@@ -33,8 +34,10 @@ public class AvisC {
                          Avis a = new Avis();
            try {
                a.setId_avis(rs.getInt(1));
-                a.setId_chauffeur(rs.getInt(2));
-                a.setId_client(rs.getInt(3));
+               ClientC us=new ClientC();
+               ChauffeurC vs=new ChauffeurC();
+               a.setClient(us.retournerClient(rs.getInt(3)));
+               a.setChauffeur(vs.retournerChauffeur(rs.getInt(2)));
                 a.setMsg(rs.getString(4));
                 a.setNote(rs.getInt(5));
            } catch (SQLException ex) {
@@ -56,8 +59,8 @@ public class AvisC {
         try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
-            pst.setInt(1,a.getId_chauffeur());
-            pst.setInt(2,a.getId_client());
+            pst.setInt(1,a.getChauffeur().getId_user());
+            pst.setInt(2,a.getClient().getId_user());
             pst.setString(3,a.getMsg());
             pst.setInt(4,a.getNote());
             pst.executeUpdate();
@@ -75,7 +78,7 @@ public class AvisC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-
+                
               list.add(recupereResultat(rs));
             }
         }
@@ -216,6 +219,21 @@ public class AvisC {
    
    return list;
    }
+   
       
-      
+        public Avis retournerAvis(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from avis where id_avis=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(AvisC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
+   }
+
 }
