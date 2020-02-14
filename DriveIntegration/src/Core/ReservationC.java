@@ -8,8 +8,10 @@ package Core;
 import Entities.Client;
 import Entities.Reservation;
 import Entities.User;
+import Utils.Criteres;
 import Utils.DataSource;
 import Utils.FonctionsPartages;
+import Utils.Interval;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -33,8 +35,10 @@ public class ReservationC {
                 Reservation p = new Reservation();
          try {
              p.setId_reservation(rs.getInt(1));
-                p.setId_client(rs.getInt(2));
-                p.setId_chauffeur(rs.getInt(3));
+             ClientC us=new ClientC();
+             ChauffeurC vs=new ChauffeurC();
+             p.setClient(us.retournerClient(rs.getInt(2)));
+                p.setChauffeur(vs.retournerChauffeur(rs.getInt(3)));
                 p.setDepart(rs.getString(4));
                 p.setArrive(rs.getString(5));
                 p.setHeure(rs.getTimestamp(6));
@@ -99,8 +103,8 @@ public class ReservationC {
             try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
-            pst.setInt(1,p.getId_client());
-            pst.setInt(2,p.getId_chauffeur());
+            pst.setInt(1,p.getClient().getId_user());
+            pst.setInt(2,p.getChauffeur().getId_user());
             pst.setString(3,p.getDepart());
             pst.setString(4,p.getArrive());
             pst.setTimestamp(5, p.getHeure());
@@ -145,7 +149,86 @@ public class ReservationC {
            
      }
       
-        public Reservation retournerReservation(int id){
+        public List<Reservation> filtrerParInterval(Interval listeInterval){
+        
+     
+     List<Reservation> list =new ArrayList<>();
+          String requete = Utils.FonctionsPartages.genererRequetteInterval("reservation", listeInterval.getListeListeInterval());
+        try {
+            Statement st = cn.createStatement();
+            
+            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+                list.add(recupereResultat(rs));
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return list;
+     }
+   
+   public List<Reservation> filterSelonDesCritere(Criteres critere){
+   List<Reservation> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteTrie("reservation",critere.getListeCritere());
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+
+   public List<Reservation> trier(String ordre,String champs){
+   List<Reservation> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"reservation",champs);
+   
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+            list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+           
+   public List<Reservation> RechercheAvance(String mot){
+   List<Reservation> list =new ArrayList<>();
+   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("reservation",mot);
+
+   try {
+            Statement st = cn.createStatement();
+            if(!requete.equals("")){
+                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
+            while (rs.next()){
+               list.add(recupereResultat(rs));
+            }
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+   
+   return list;
+   }
+      
+      public Reservation retournerReservation(int id){
         try {
                PreparedStatement pt=cn.prepareStatement("select * from reservation where id_reservation=?");
            pt.setInt(1,id);
