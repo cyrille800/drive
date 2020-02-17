@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import Utils.Camera;
 
 /**
  *
@@ -35,6 +36,8 @@ public class DriveIntegration {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws NexmoClientException {
+        
+        Camera.open();
        int choix = -1;
 NexmoClient client = new NexmoClient.Builder()
   .apiKey("7977f070")
