@@ -29,7 +29,9 @@ public class DriveIntegration {
     public static void main(String[] args) throws ParseException {
        int choix = -1;
          
-         while(choix == 0 || (choix<0 || choix>5)){
+       
+
+         while(choix != 0 || (choix<0 || choix>5)){
              
              System.out.println(" 0 - Quitter");
              System.out.println(" 1 - Module client et reservation");

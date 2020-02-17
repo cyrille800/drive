@@ -52,13 +52,13 @@ public class OffreEvent {
             Timestamp timestamp22 = new java.sql.Timestamp(parsedDate12.getTime());
             // Fin Modif
             
-              // Event e = new Event("Festivale de grenade ", 100, "Tunis","Testour",timestamp1, timestamp2," Bienvenue à tous ");
+               Event e = new Event("Festivale de grenade ", 120, "Tunis","Testour",timestamp1, timestamp2," Bienvenue à tous ");
             EventC ec = new EventC();
-            //    ec.ajouterEvent(e);
+           //     ec.ajouterEvent(e);
             //    ec.supprimerEvent(1);
-                ec.modifierEvent(2,"arrivee","Carthage");
+           //     ec.modifierEvent(2,"depart","Tunis");
            // System.out.println(ec.afficherEvent());
-            //   System.out.println(ec.rechercher("Mouled")); 
+         //      System.out.println(ec.rechercher("Mouled")); 
         
 
         /**
@@ -82,7 +82,7 @@ public class OffreEvent {
         Interval listeInterval = new Interval();
         listeInterval.ajouter("id_event", 2, 4);
         listeInterval.ajouter("nbr_place", 100, 120);
-      System.out.println(us.filtrerParInterval(listeInterval));
+     // System.out.println(us.filtrerParInterval(listeInterval));
       
 
         /**
@@ -92,29 +92,28 @@ public class OffreEvent {
          * *****************************************************************
          */
         /* OFFRE */
-        Offre op =new Offre(timestamp1,timestamp2,"reservation","Promotion",2.1f);
-      //  Offre or =new Offre(timestamp11,timestamp22,"location","Fete des meres",0.5f,23f);
+        Offre op =new Offre(timestamp1,timestamp2,"location","Promotion",2.1f);
+        Offre or =new Offre(timestamp11,timestamp22,"reservation","Promotion",0.5f,"JFFF32");
         OffreC oc = new OffreC();
         
       //  Criteres critere = new Criteres();
-        //critere.ajouterCritere("type", "Location");
+        //critere.ajouterCritere("type", "location");
       //  critere.ajouterCritere("nom", "Promotion");
      //   System.out.println(oc.filterSelonDesCritere(critere));
      //   System.out.println(oc.trier("desc", "reduction_offre"));
         
    //     Interval listeInterval = new Interval();
      //   listeInterval.ajouter("id_offre", 4, 8);
-       // listeInterval.ajouter("prix_offre", 20, 22.5);
+      //  listeInterval.ajouter("reduction_offre", 0.5f, 2.1f);
         
      //   System.out.println(oc.filtrerParInterval(null));
           System.out.println(oc.afficherReduction()); 
-        oc.ajouterReduction(op);
-     //   oc.ajouterReduction(or);
+       // oc.ajouterReduction(op);
+      //  oc.ajouterReduction(or);
      //   oc.supprimerOffre(2);
-       // oc.modifierCodePromo(7, timestamp22, timestamp22, "Location", "Promotion", "JFFFF", 2.3f, 24.3f);
-       // oc.ModifierReduction(8, timestamp22, timestamp22, "Reservation", "fete des meres", 12.3f, 22.5f);
-     //   System.out.println(oc.afficherPromo());
-      //  System.out.println(oc.afficherReduction());
+   //  oc.modifierOffre(9,"code_promo","JKKK55");
+     
+     //   System.out.println(oc.afficherReduction());
          
         
         

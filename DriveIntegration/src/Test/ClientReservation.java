@@ -32,6 +32,7 @@ public class ClientReservation {
     ClientC cs= new ClientC();
     ReservationC rs= new ReservationC();
     
+
     rs.RechercheAvance("2019").stream().forEach(System.out::println);
     /*
         Interval i = new Interval();

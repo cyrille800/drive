@@ -99,7 +99,8 @@ public class ReservationC {
       
    public void ajouterReservation(Reservation p){
           String requete ="insert into reservation (id_client,id_chauffeur,depart,arrive,heure,prix,type_reservation,code_liv,nbr_place) values (?,?,?,?,?,?,?,?,?) "; // précomplier
-        if(p.getType_reservation().equals("livraison") || p.getType_reservation().equals("personnel") || p.getType_reservation().equals("covoiturage")){
+          if(FonctionsPartages.validerDate(p.getHeure())==true){
+             if(p.getType_reservation().equals("livraison") || p.getType_reservation().equals("personnel") || p.getType_reservation().equals("covoiturage")){
             try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
@@ -118,7 +119,10 @@ public class ReservationC {
         }
         }else{
             System.out.println("le type de reservation est incorrect");
-        }
+        }     
+          }else{
+              System.out.println("la date est incorrect");
+          }
          
     }
     public List<Reservation> afficher(){

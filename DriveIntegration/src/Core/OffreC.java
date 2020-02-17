@@ -68,7 +68,7 @@ public class OffreC {
     }
     
  
-       public boolean modifierEvent(int id,String champs,Object value){
+       public boolean modifierOffre(int id,String champs,Object value){
     String   requete = "update offre set "+champs+"=?  where id_offre=?";
          if(FonctionsPartages.verifierExistanteDuneValeur("offre","id_offre",id)==true && FonctionsPartages.verifierSiChampExistant("offre",champs)==true){
        try {
