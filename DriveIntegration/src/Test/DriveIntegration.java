@@ -46,7 +46,7 @@ public class DriveIntegration {
                 
                     switch (choix) {
   case 1:
-    Test.ClientReservation.startConsole();
+    //Test.ClientReservation.startConsole();
     break;
   case 2:
     Test.ChauffeurTaxi.startConsole();

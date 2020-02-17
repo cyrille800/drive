@@ -46,6 +46,7 @@ public class OffreEvent {
         Date parsedDate;
         Date parsedDate12;
         Date parsedDate11;
+        
         try {
             // date pour l'Ajout
             parsedDate = dateFormat.parse("2000-11-11 11:20:21 PM"); 
@@ -147,6 +148,12 @@ public class OffreEvent {
            eC.ajouterEvent(e2);
             User u=new User(16,699875176,"armand","12345678",1,"armand@gmail.com");
              Client c= new Client(u,12);
+              JavamailUtil mail = new JavamailUtil();
+            try {
+                mail.sendMail("ghadadadou07@gmail.com");
+            } catch (Exception ex) {
+                Logger.getLogger(OffreEvent.class.getName()).log(Level.SEVERE, null, ex);
+            }
           PDFutil pdf = new PDFutil();
             try {
                 pdf.listEvent();
@@ -156,8 +163,7 @@ public class OffreEvent {
                 //  inC.ajouterInscrit(in);
                 
                 
-                //      JavamailUtil mail = new JavamailUtil();
-                //    mail.sendMail("ghadadadou07@gmail.com");
+                    
             } catch (SQLException ex) {
                 Logger.getLogger(OffreEvent.class.getName()).log(Level.SEVERE, null, ex);
             } catch (DocumentException ex) {
@@ -168,6 +174,7 @@ public class OffreEvent {
         
        } catch (ParseException ex) {
             Logger.getLogger(DriveIntegration.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
+        
     }
 }
