@@ -6,12 +6,8 @@
 package Core;
 
 import Entities.Client;
-import Entities.Reservation;
-import Entities.User;
-import Utils.Criteres;
 import Utils.DataSource;
 import Utils.FonctionsPartages;
-import Utils.Interval;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -29,28 +25,7 @@ import java.util.logging.Logger;
  * @author Armand
  */
 public class ClientC {
-         Connection cn =DataSource.getInstance().getConnexion();
-       public Client recupereResultat(ResultSet rs){
-                Client p = new Client();
-         try {
-                p.setId_user(rs.getInt(1));
-             UserC us= new UserC();
-             User user= us.retournerUser(rs.getInt(1));
-              p.setN_tel(user.getN_tel());
-                p.setLogin(user.getLogin());
-                p.setMdp(user.getMdp());
-                p.setEtat(user.getEtat());
-                p.setMail(user.getMail());
-                
-                p.setNbr_res_annulee(rs.getInt(2));
-                
-         } catch (SQLException ex) {
-             Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
-         }
-                 
-                
-                return p;
-   }
+    
             public boolean modifierReservation(int id,String champs,Object value){
     String   requete = "update client set "+champs+"=?  where id_user=?";
          if(FonctionsPartages.verifierExistanteDuneValeur("client","id_user",id)==true && FonctionsPartages.verifierSiChampExistant("client",champs)==true){
@@ -89,6 +64,7 @@ public class ClientC {
    }
             
             
+     Connection cn =DataSource.getInstance().getConnexion();
    public void ajouterClient(Client p){
           String requete ="insert into client (id_user,nbr_res_annulee) values (?,?) "; // précomplier
         try {
@@ -109,7 +85,15 @@ public class ClientC {
             Statement st = cn.createStatement();
             ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
             while (rs.next()){
-                list.add(recupereResultat(rs));
+                Client p = new Client();
+                p.setId_user(rs.getInt(1));
+                p.setNbr_res_annulee(rs.getInt(2));
+                p.setN_tel(rs.getInt(4));
+                p.setLogin(rs.getString(5));
+                p.setMdp(rs.getString(6));
+                p.setEtat(rs.getInt(7));
+                p.setMail(rs.getString(8));
+                list.add(p);
             }
         }
          catch (SQLException ex) {
@@ -125,107 +109,12 @@ public class ClientC {
             PreparedStatement pt=cn.prepareStatement("delete from client where id_user=?");
            pt.setInt(1,id);
             pt.executeUpdate();
-            UserC u=new UserC();
-            u.supprimerUser(id);
+            PreparedStatement pts=cn.prepareStatement("delete from user where id_user=?");
+           pts.setInt(1,id);
+            pts.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
         }
            
      }
-      
-        public List<Client> filtrerParInterval(Interval listeInterval){
-        
-     
-     List<Client> list =new ArrayList<>();
-          String requete = Utils.FonctionsPartages.genererRequetteInterval("client", listeInterval.getListeListeInterval());
-        try {
-            Statement st = cn.createStatement();
-            
-            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
-            while (rs.next()){
-                list.add(recupereResultat(rs));
-            }
-        }
-         catch (SQLException ex) {
-            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
-    }
-        return list;
-     }
-   
-   public List<Client> filterSelonDesCritere(Criteres critere){
-   List<Client> list =new ArrayList<>();
-   String requete=Utils.FonctionsPartages.genererRequetteTrie("client",critere.getListeCritere());
-   
-   try {
-            Statement st = cn.createStatement();
-            if(!requete.equals("")){
-                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
-            while (rs.next()){
-               list.add(recupereResultat(rs));
-            }
-            }
-        }
-         catch (SQLException ex) {
-            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
-    }
-   
-   return list;
-   }
-
-   public List<Client> trier(String ordre,String champs){
-   List<Client> list =new ArrayList<>();
-   String requete=Utils.FonctionsPartages.genererRequettetrier(ordre,"client",champs);
-   
-   try {
-            Statement st = cn.createStatement();
-            if(!requete.equals("")){
-                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
-            while (rs.next()){
-            list.add(recupereResultat(rs));
-            }
-            }
-        }
-         catch (SQLException ex) {
-            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
-    }
-   
-   return list;
-   }
-           
-   public List<Client> RechercheAvance(String mot){
-   List<Client> list =new ArrayList<>();
-   String requete=Utils.FonctionsPartages.genererRequetteRechercherAvancer("client",mot);
-       System.out.println(requete);
-   try {
-            Statement st = cn.createStatement();
-            if(!requete.equals("")){
-                ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
-            while (rs.next()){
-               list.add(recupereResultat(rs));
-            }
-            }
-        }
-         catch (SQLException ex) {
-            Logger.getLogger(UserC.class.getName()).log(Level.SEVERE, null, ex);
-    }
-   
-   return list;
-   }
-       public Client retournerClient(int id){
-        try {
-               PreparedStatement pt=cn.prepareStatement("select * from client where id_user=?");
-           pt.setInt(1,id);
-            ResultSet rs = pt.executeQuery();
-            while (rs.next()){
-              return recupereResultat(rs);
-            }
-        }
-         catch (SQLException ex) {
-            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
-    }
-        return null;
-   }
-       
-       
-       
 }

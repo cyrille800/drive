@@ -67,13 +67,13 @@ public class OffreEvent {
             
             // Fin Modif
             
-              // Event e = new Event("Festivale de grenade ", 100, "Tunis","Testour",timestamp1, timestamp2," Bienvenue à tous ");
+               Event e = new Event("Festivale de grenade ", 120, "Tunis","Testour",timestamp1, timestamp2," Bienvenue à tous ");
             EventC ec = new EventC();
-            //    ec.ajouterEvent(e);
+           //     ec.ajouterEvent(e);
             //    ec.supprimerEvent(1);
-                ec.modifierEvent(2,"arrivee","Carthage");
+           //     ec.modifierEvent(2,"depart","Tunis");
            // System.out.println(ec.afficherEvent());
-            //   System.out.println(ec.rechercher("Mouled")); 
+         //      System.out.println(ec.rechercher("Mouled")); 
         
 
         /**
@@ -81,13 +81,13 @@ public class OffreEvent {
          */
         EventC us = new EventC();
         
-      //      System.out.println(us.RechercheAvancePrRedution("3")); 
+            System.out.println(us.RechercheAvancePrRedution("3")); 
         
         
 
-     //   Criteres critere = new Criteres();
-      //  critere.ajouterCritere("depart", "Tunis");
-      // critere.ajouterCritere("arrivee", "Carthage");
+        Criteres critere = new Criteres();
+        critere.ajouterCritere("depart", "Tunis");
+        critere.ajouterCritere("arrivee", "Carthage");
      //   System.out.println(us.filterSelonDesCritere(critere));
 
         //  System.out.println(us.afficherEvent());
