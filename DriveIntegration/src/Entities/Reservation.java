@@ -14,8 +14,8 @@ import java.util.Objects;
  */
 public class Reservation {
     private int id_reservation;
-    private Client client;
-    private Chauffeur chauffeur;
+    private int id_client;
+    private int id_chauffeur;
     private String depart;
     private String arrive;
     private Timestamp heure;
@@ -27,36 +27,16 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Client client, Chauffeur chauffeur, String depart, String arrive, Timestamp heure, double prix, String type_reservation, int code_liv) {
-        this.client = client;
-        this.chauffeur = chauffeur;
+    public Reservation(int id_client, int id_chauffeur, String depart, String arrive, Timestamp heure, double prix, String type_reservation, int code_liv, int nbr_place) {
+        this.id_client = id_client;
+        this.id_chauffeur = id_chauffeur;
         this.depart = depart;
         this.arrive = arrive;
         this.heure = heure;
         this.prix = prix;
-        this.type_reservation = "livraison";
+        this.type_reservation = type_reservation;
         this.code_liv = code_liv;
-    }
-
-   public Reservation(Client client, Chauffeur chauffeur, String depart, String arrive, Timestamp heure, double prix, int nbrplace) {
-        this.client = client;
-        this.chauffeur = chauffeur;
-        this.depart = depart;
-        this.arrive = arrive;
-        this.heure = heure;
-        this.prix = prix;
-        this.type_reservation = "covoiturage";
-        this.nbr_place = nbrplace;
-    }
-   
-    public Reservation(Client client, Chauffeur chauffeur, String depart, String arrive, Timestamp heure, double prix) {
-        this.client = client;
-        this.chauffeur = chauffeur;
-        this.depart = depart;
-        this.arrive = arrive;
-        this.heure = heure;
-        this.prix = prix;
-        this.type_reservation = "personnel";
+        this.nbr_place = nbr_place;
     }
 
     public int getId_reservation() {
@@ -67,20 +47,20 @@ public class Reservation {
         this.id_reservation = id_reservation;
     }
 
-    public Client getClient() {
-        return client;
+    public int getId_client() {
+        return id_client;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setId_client(int id_client) {
+        this.id_client = id_client;
     }
 
-    public Chauffeur getChauffeur() {
-        return chauffeur;
+    public int getId_chauffeur() {
+        return id_chauffeur;
     }
 
-    public void setChauffeur(Chauffeur chauffeur) {
-        this.chauffeur = chauffeur;
+    public void setId_chauffeur(int id_chauffeur) {
+        this.id_chauffeur = id_chauffeur;
     }
 
     public String getDepart() {
@@ -141,15 +121,7 @@ public class Reservation {
 
     @Override
     public String toString() {
-        String mp= "Reservation{" + "id_reservation=" + id_reservation + ", " + client.toString() + ", " + chauffeur.toString() + ", depart=" + depart + ", arrive=" + arrive + ", heure=" + heure + ", prix=" + prix + ", type_reservation=" + type_reservation;
-        if(code_liv != 0){
-             mp += ", code_liv=" + code_liv + ", nbr_place=" + nbr_place + '}';
-        }
-           if(type_reservation.equals("covoiturage")){
-             mp += ", nbr_place=" + nbr_place + '}';
-        }
-           
-           return mp;
+        return "Reservation{" + "id_reservation=" + id_reservation + ", id_client=" + id_client + ", id_chauffeur=" + id_chauffeur + ", depart=" + depart + ", arrive=" + arrive + ", heure=" + heure + ", prix=" + prix + ", type_reservation=" + type_reservation + ", code_liv=" + code_liv + ", nbr_place=" + nbr_place + '}';
     }
 
     @Override
@@ -168,7 +140,7 @@ public class Reservation {
             return false;
         }
         final Reservation other = (Reservation) obj;
-        if (this.client.getId_user() != other.client.getId_user()) {
+        if (this.id_client != other.id_client) {
             return false;
         }
         if (!Objects.equals(this.depart, other.depart)) {

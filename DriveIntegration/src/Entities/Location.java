@@ -14,8 +14,8 @@ import java.util.Date;
  */
 public class Location {
     private int id_location;
-    private Client client;
-    private Velo velo;
+    private int id_client;
+    private int id_velo;
     private Timestamp date_d;
     private Timestamp date_f;
     private float prix;
@@ -24,68 +24,66 @@ public class Location {
     public Location() {
     }
 
-    public Location(Client client, Velo velo, Timestamp date_d, Timestamp date_f) {
-        this.client = client;
-        this.velo = velo;
+    public Location(int id_client, int id_velo, Timestamp date_d, Timestamp date_f, float prix) {
+        
+        this.id_client = id_client;
+        this.id_velo = id_velo;
         this.date_d = date_d;
         this.date_f = date_f;
+        this.prix = prix;
     }
 
     public int getId_location() {
         return id_location;
     }
 
-    public void setId_location(int id_location) {
-        this.id_location = id_location;
+    public int getId_client() {
+        return id_client;
     }
 
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Velo getVelo() {
-        return velo;
-    }
-
-    public void setVelo(Velo velo) {
-        this.velo = velo;
+    public int getId_velo() {
+        return id_velo;
     }
 
     public Timestamp getDate_d() {
         return date_d;
     }
 
-    public void setDate_d(Timestamp date_d) {
-        this.date_d = date_d;
-    }
-
     public Timestamp getDate_f() {
         return date_f;
-    }
-
-    public void setDate_f(Timestamp date_f) {
-        this.date_f = date_f;
     }
 
     public float getPrix() {
         return prix;
     }
 
+    public void setId_location(int id_location) {
+        this.id_location = id_location;
+    }
+
+    public void setId_client(int id_client) {
+        this.id_client = id_client;
+    }
+
+    public void setId_velo(int id_velo) {
+        this.id_velo = id_velo;
+    }
+
+    public void setDate_d(Timestamp date_d) {
+        this.date_d = date_d;
+    }
+
+    public void setDate_f(Timestamp date_f) {
+        this.date_f = date_f;
+    }
+
     public void setPrix(float prix) {
         this.prix = prix;
     }
 
-
-
-  
-
     @Override
     public String toString() {
-        return "location{" + "id_location=" + id_location + ", " + client.toString() + ", " + velo.toString() + ", date_d=" + date_d + ", date_f=" + date_f + ", prix=" + prix + '}';
+        return "location{" + "id_location=" + id_location + ", id_client=" + id_client + ", id_velo=" + id_velo + ", date_d=" + date_d + ", date_f=" + date_f + ", prix=" + prix + '}';
     }
     
     

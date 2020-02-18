@@ -12,7 +12,11 @@ package Entities;
 public class Client extends User{
     private int nbr_res_annulee;
 
-
+    public Client(int nbr_res_annulee, int id_user, int n_tel, String login, String mdp, int etat, String mail) {
+        super(n_tel, login, mdp, etat, mail);
+        this.id_user=id_user;
+        this.nbr_res_annulee = nbr_res_annulee;
+    }
     public Client(User u,int nbr_res_annulee) {
         super(u.getN_tel(), u.getLogin(), u.getMdp(), u.getEtat(), u.getMail());
         this.id_user=u.getId_user();
