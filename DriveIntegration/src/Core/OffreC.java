@@ -67,19 +67,32 @@ public class OffreC {
 
     }
     
-    public void ModifierReduction(int id, Timestamp date_allee, Timestamp date_retour, String type, String Nom, float reduction_offre, float prix_offre) {
-
-        String requete = "update offre set date_d=?, date_f=?,type=?,nom=?, reduction_offre=?, prix_offre=?  where id_offre=?";
-        try {
-            PreparedStatement pt = cn.prepareStatement(requete);
-
-            pt.setTimestamp(1, date_allee);
-            pt.setTimestamp(2, date_retour);
-            pt.setString(3, type);
-            pt.setString(4, Nom);
-            pt.setFloat(5, reduction_offre);
-            pt.setFloat(6, prix_offre);
-            pt.setInt(7, id);
+ 
+       public boolean modifierOffre(int id,String champs,Object value){
+    String   requete = "update offre set "+champs+"=?  where id_offre=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("offre","id_offre",id)==true && FonctionsPartages.verifierSiChampExistant("offre",champs)==true){
+       try {
+            PreparedStatement pt= cn.prepareStatement(requete);
+            
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -223,7 +236,7 @@ public class OffreC {
     
     
     /**********************************************************************************************************************************/
-         public List<Offre> filtrerParInterval(Interval listeInterval){
+  /*       public List<Offre> filtrerParInterval(Interval listeInterval){
         
      
      List<Offre> list =new ArrayList<>();
@@ -240,7 +253,7 @@ public class OffreC {
             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
     }
         return list;
-     }
+     }*/
    public List<Offre> filterSelonDesCritere(Criteres critere){
    List<Offre> list =new ArrayList<>();
    String requete=Utils.FonctionsPartages.genererRequetteTrie("offre",critere.getListeCritere());
