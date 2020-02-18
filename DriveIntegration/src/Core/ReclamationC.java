@@ -8,10 +8,8 @@ package Core;
 import Entities.Reclamation;
 import Utils.Criteres;
 import Utils.DataSource;
-import Utils.FonctionsPartages;
 import Utils.Interval;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,8 +36,7 @@ public class ReclamationC {
                 a.setMsg(rs.getString(3));
                 a.setEtat(rs.getInt(4));
                 a.setDateAjout(rs.getTimestamp(5));
-             ClientC us=new ClientC();
-                a.setClient(us.retournerClient(rs.getInt(6)));
+                a.setId_client(rs.getInt(6));
            } catch (SQLException ex) {
                Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
            }
@@ -53,7 +50,7 @@ public class ReclamationC {
         try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
-            pst.setInt(1,r.getClient().getId_user());
+            pst.setInt(1,r.getId_client());
             pst.setString(2,r.getSujet_rec());
             pst.setString(3,r.getMsg());
             pst.setInt(4,r.getEtat());
@@ -79,43 +76,20 @@ public class ReclamationC {
         return list;
            
     }
-     public boolean modifierAvis(int id,String champs,Object value){
-    String   requete = "update reclamation set "+champs+"=?  where id_rec=?";
-         if(FonctionsPartages.verifierExistanteDuneValeur("reclamation","id_rec",id)==true && FonctionsPartages.verifierSiChampExistant("reclamation",champs)==true){
-       try {
+     public void modifierReclamation(int id_rec,String sujet_rec, String msg) {
+       
+       String   requete = "update reclamation set sujet_rec=?,msg=?   where id_rec=?";
+         try {
             PreparedStatement pt= cn.prepareStatement(requete);
             
-            if (value instanceof Integer){
-            pt.setInt(1,(int) value);
-            }
-             if (value instanceof Float){
-            pt.setFloat(1,(float) value);
-            }   
-             if (value instanceof Double){
-            pt.setDouble(1,(double) value);
-            } 
-             if (value instanceof String){
-            pt.setString(1,(String) value);
-            } 
-             if (value instanceof Date){
-            pt.setDate(1,(Date) value);
-            } 
-             if (value instanceof Timestamp){
-            pt.setTimestamp(1,(Timestamp) value);
-            } 
-            pt.setInt(2, id);
+            pt.setString(1,sujet_rec);
+            pt.setString(2,msg);
+            pt.setInt(3, id_rec);
             pt.executeUpdate();
-            return true;
         } catch (SQLException ex) {
             Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
-        }  
-       }else{
-             System.out.println("le champs ou l'identifiant est incorrect");
-         }
-       
-       return false;
-   }
-             
+        }
+    }
       public void supprimerReclamation( int id)
      {
            try {
@@ -213,19 +187,5 @@ public class ReclamationC {
    return list;
    }
 
-
-       public Reclamation retournerReclamation(int id){
-        try {
-               PreparedStatement pt=cn.prepareStatement("select * from reclamation where id_rec=?");
-           pt.setInt(1,id);
-            ResultSet rs = pt.executeQuery();
-            while (rs.next()){
-              return recupereResultat(rs);
-            }
-        }
-         catch (SQLException ex) {
-            Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
-    }
-        return null;
-   }
+      
 }

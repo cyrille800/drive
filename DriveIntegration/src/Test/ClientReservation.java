@@ -5,8 +5,6 @@
  */
 package Test;
 
-import Core.*;
-import Utils.Criteres;
 import Utils.DataSource;
 import Utils.Interval;
 import java.sql.Timestamp;

@@ -18,8 +18,6 @@ import java.util.Objects;
  * @author Meriem
  */
 public class Event {
-    
-    
  private int id_event;
  private String nom;
 private  int nbr_place;

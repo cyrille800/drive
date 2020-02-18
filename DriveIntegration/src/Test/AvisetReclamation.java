@@ -8,10 +8,6 @@ package Test;
 import Core.AvisC;
 import Core.ReclamationC;
 import Entities.Avis;
-import Entities.Chauffeur;
-import Entities.Client;
-import Entities.Reclamation;
-import Entities.User;
 import Utils.DataSource;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -33,6 +29,7 @@ public class AvisetReclamation {
        try{
           parsedDate = dateFormat.parse("2020-02-09 11:20:21");
           Timestamp timestamp1=new java.sql.Timestamp(parsedDate.getTime());
+         
           
            User u=new User(16,6988,"login","io",1,"er");
            User u1=new User(15,6988,"login","yesdsss",0,"enooooor");
@@ -55,8 +52,8 @@ public class AvisetReclamation {
    
   // p.modifierReclamation(4, "modif", "mofffff");
    //ps.supprimerAvis(1);
-  // p.ajouterReclamation(r);
-  //System.out.println(ps.afficher());
+   //p.ajouterReclamation(r);
+  // System.out.println(p.afficher());
       // System.out.println(ps.afficher());
       //  p.supprimerReclamation(7);
        // System.out.println(ps.afficher()+"deleted");

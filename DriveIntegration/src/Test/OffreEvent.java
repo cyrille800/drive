@@ -7,7 +7,6 @@ package Test;
 
 import Core.EventC;
 import Core.OffreC;
-import Entities.Event;
 import Entities.Offre;
 import Utils.Criteres;
 import Utils.Interval;
@@ -66,19 +65,19 @@ public class OffreEvent {
          */
         EventC us = new EventC();
         
-      //      System.out.println(us.RechercheAvancePrRedution("3")); 
+            System.out.println(us.RechercheAvancePrRedution("3")); 
         
         
 
-     //   Criteres critere = new Criteres();
-      //  critere.ajouterCritere("depart", "Tunis");
-      // critere.ajouterCritere("arrivee", "Carthage");
+        Criteres critere = new Criteres();
+        critere.ajouterCritere("depart", "Tunis");
+        critere.ajouterCritere("arrivee", "Carthage");
      //   System.out.println(us.filterSelonDesCritere(critere));
 
         //  System.out.println(us.afficherEvent());
         System.out.println("*******************************************************");
         
-        // 
+        // modifierReclamation
         Interval listeInterval = new Interval();
         listeInterval.ajouter("id_event", 2, 4);
         listeInterval.ajouter("nbr_place", 100, 120);
