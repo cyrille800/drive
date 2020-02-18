@@ -7,12 +7,15 @@ package Core;
 import Entities.Velo;
 import Utils.Criteres;
 import Utils.DataSource;
+import Utils.FonctionsPartages;
 import Utils.Interval;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,7 +45,10 @@ public class VeloC {
                 return p;
    }
    public void ajouterVelo(Velo p){
-          String requete ="insert into velo(type,adresse,qte,photo,prix) values (?,?,?,?,?) "; // précomplier
+       
+       if(p.getType().equals("velo electrique")||p.getType().equals("velo")){
+           
+         String requete ="insert into velo(type,adresse,qte,photo,prix) values (?,?,?,?,?) "; // précomplier
         try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
@@ -55,7 +61,12 @@ public class VeloC {
         } catch (SQLException ex) {
             Logger.getLogger(VeloC.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
+           
+       }else{
+           System.out.println("verifier le type du velo");
+       }
+       
+          
     }
     public List<Velo> afficher(){
           List<Velo> list =new ArrayList<>(); // array list Vectoc plus lent il ne pejut pas executer plusieurs en mm temps
@@ -74,23 +85,42 @@ public class VeloC {
         return list;
            
     }
-     public void modifierVelo(int id, String type, String adresse,int qte,String photo,float prix) {
-       
-       String   requete = "update velo set type=?, adresse=?,qte=?,photo=?,prix=?  where id=?";
-         try {
+    public boolean modifierVelo(int id,String champs,Object value){
+    String   requete = "update velo set "+champs+"=?  where id=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("velo","id",id)==true && FonctionsPartages.verifierSiChampExistant("velo",champs)==true){
+       try {
             PreparedStatement pt= cn.prepareStatement(requete);
-            pt.setString(1,type);
-            pt.setString(2, adresse);
-            pt.setInt(3, qte);
-            pt.setString(4, photo);
-            pt.setFloat(5, prix);
-            pt.setInt(6, id);
-             System.out.println(id+type+adresse+qte+photo);
+            
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(VeloC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+        }  
+       }else{
+             System.out.println("le champs ou l'identifiant est incorrect");
+         }
+       
+       return false;
+   }
       public void supprimerVelo( int id)
      {
            try {
@@ -205,5 +235,20 @@ public class VeloC {
     }
    
    return list;
+   }
+          
+       public Velo retournerVelo(int id){
+        try {
+               PreparedStatement pt=cn.prepareStatement("select * from velo where id=?");
+           pt.setInt(1,id);
+            ResultSet rs = pt.executeQuery();
+            while (rs.next()){
+              return recupereResultat(rs);
+            }
+        }
+         catch (SQLException ex) {
+            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        return null;
    }
 }

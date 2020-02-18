@@ -18,6 +18,8 @@ import java.util.Objects;
  * @author Meriem
  */
 public class Event {
+    
+    
  private int id_event;
  private String nom;
 private  int nbr_place;
@@ -26,17 +28,6 @@ private  int nbr_place;
  private Timestamp date_allee;
  private Timestamp date_retour;
  private String description;
-
-    public Event(int id_event, String nom, int nbr_place, String depart, String arrivee, Timestamp date_allee, Timestamp date_retour, String description) {
-        this.id_event = id_event;
-        this.nom = nom;
-        this.nbr_place = nbr_place;
-        this.depart = depart;
-        this.arrivee = arrivee;
-        this.date_allee = date_allee;
-        this.date_retour = date_retour;
-        this.description = description;
-    }
  
     public Event() {
     }
