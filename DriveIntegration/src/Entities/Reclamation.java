@@ -17,10 +17,10 @@ public class Reclamation {
     private String msg;
     private int etat;
     private Timestamp dateAjout;
-    private int id_client;
+    private Client client;
 
-    public Reclamation(int id_client,int id_rec, String sujet_rec, String msg, int etat, Timestamp dateAjout) {
-        this.id_client =id_client;
+    public Reclamation(Client c,int id_rec, String sujet_rec, String msg, int etat, Timestamp dateAjout) {
+        this.client =c;
         this.id_rec = id_rec;
         this.sujet_rec = sujet_rec;
         this.msg = msg;
@@ -39,8 +39,8 @@ public class Reclamation {
         return id_rec;
     }
 
-    public int getId_client() {
-        return id_client;
+    public Client getClient() {
+        return client;
     }   
     public String getSujet_rec() {
         return sujet_rec;
@@ -73,8 +73,8 @@ public class Reclamation {
     public void setEtat(int etat) {
         this.etat = etat;
     }
-public void setId_client(int id_client) {
-        this.id_client =id_client;
+public void setClient(Client client) {
+        this.client=client;
     }
     public void setDateAjout(Timestamp dateAjout) {
         this.dateAjout = dateAjout;
@@ -82,7 +82,7 @@ public void setId_client(int id_client) {
 
     @Override
     public String toString() {
-        return "ReclamationC{" + "id_rec=" + id_rec + ", sujet_rec=" + sujet_rec + ", msg=" + msg + ", etat=" + etat + ", dateAjout=" + dateAjout + ", id_client=" + id_client + '}';
+        return "ReclamationC{" + "id_rec=" + id_rec + ", sujet_rec=" + sujet_rec + ", msg=" + msg + ", etat=" + etat + ", dateAjout=" + dateAjout + ", " +client.toString() + '}';
     }
     
 }
