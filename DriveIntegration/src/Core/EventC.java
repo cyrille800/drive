@@ -5,15 +5,11 @@
  */
 package Core;
 
-
 import Entities.Event;
 import Utils.Criteres;
 import Utils.DataSource;
 import Utils.FonctionsPartages;
 import Utils.Interval;
-import Utils.TrayIconDemo;
-import java.awt.AWTException;
-import java.awt.SystemTray;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -51,12 +47,7 @@ public class EventC {
                 
                 return e;
    }
-    public void ajouterEvent(Event e)  {
-       // if (e.getNom().equals(e) && e.getDate_allee()== && e.getDate_retour()== ){
-        if (FonctionsPartages.verifierValeurDunChampsExistant("event", "nom", e.getNom())==true &&
-            FonctionsPartages.verifierValeurDunChampsExistant("event", "date_allee", e.getDate_allee())==false  &&
-            FonctionsPartages.verifierValeurDunChampsExistant("event", "date_retour", e.getDate_retour())==false    )
-        {
+    public void ajouterEvent(Event e) {
         String requete = "insert into event (nom,nbr_place,depart,arrivee,date_allee,date_retour,description) values (?,?,?,?,?,?,?) "; // précomplier
         try {
 
@@ -69,61 +60,10 @@ public class EventC {
             pst.setTimestamp(6, (Timestamp) e.getDate_retour());
             pst.setString(7, e.getDescription());
             pst.executeUpdate();
-            if (SystemTray.isSupported()) {
-            TrayIconDemo td = new TrayIconDemo();
-                try {
-                    td.trayAjout();
-                } catch (AWTException ex) {
-                    Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
-                }
-        } else {
-            System.err.println("System tray not supported!");
-        }
         } catch (SQLException ex) {
            
             Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }else {
-            System.out.println("on a deja ajouté cet event à cette date");
-        }
-    
-    
-    }
-public String listEvent(){
-        String mail="";
-        String requete = "SELECT * FROM event";
-          
-        try {
-  Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
-            while (rs.next()) {
-                mail +="\n\n";
-                Event e = new Event();
-                e.setId_event(rs.getInt(1));
-                e.setNom(rs.getString(2));
-               e.setNbr_place(rs.getInt(3));
-                e.setDepart(rs.getString(4));
-                e.setArrivee(rs.getString(5));
-                e.setDate_allee(rs.getTimestamp(6));
-                e.setDate_retour(rs.getTimestamp(7));
-                e.setDescription(rs.getString(8));
-                
-                mail +="L'activite numero " + e.getId_event()+" :";
-                mail +="\n  Date = " + e.getNom();
-                mail +="\n  Date = " + e.getNbr_place();
-                mail +="\n  Date = " + e.getDepart();
-                mail +="\n  Libelle = " + e.getArrivee();
-                 mail +="\n  Date = " + e.getDate_allee();
-                mail +="\n  Date = " + e.getDate_retour();
-                mail +="\n  Description = " + e.getDescription();
-           
-                
-            }
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return mail;
     }
 
     public List<Event> afficherEvent() {
@@ -306,27 +246,4 @@ public List<Event> rechercher(String nom )
    return list;
    }
 
-    
-          public Event retournerEvent(int id){
-        try {
-               PreparedStatement pt=cn.prepareStatement("select * from event where id_event=?");
-           pt.setInt(1,id);
-            ResultSet rs = pt.executeQuery();
-            while (rs.next()){
-              return recupereResultat(rs);
-            }
-        }
-         catch (SQLException ex) {
-            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
-    }
-        return null;
-   }
-    
-    
-    
-    
-    
-    
-    
-    
 }
