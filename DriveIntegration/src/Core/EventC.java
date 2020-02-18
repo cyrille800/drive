@@ -5,15 +5,13 @@
  */
 package Core;
 
-
 import Entities.Event;
 import Utils.Criteres;
 import Utils.DataSource;
+import Utils.FonctionsPartages;
 import Utils.Interval;
-import Utils.TrayIconDemo;
-import java.awt.AWTException;
-import java.awt.SystemTray;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,12 +47,7 @@ public class EventC {
                 
                 return e;
    }
-    public void ajouterEvent(Event e)  {
-       // if (e.getNom().equals(e) && e.getDate_allee()== && e.getDate_retour()== ){
-        if (FonctionsPartages.verifierValeurDunChampsExistant("event", "nom", e.getNom())==true &&
-            FonctionsPartages.verifierValeurDunChampsExistant("event", "date_allee", e.getDate_allee())==false  &&
-            FonctionsPartages.verifierValeurDunChampsExistant("event", "date_retour", e.getDate_retour())==false    )
-        {
+    public void ajouterEvent(Event e) {
         String requete = "insert into event (nom,nbr_place,depart,arrivee,date_allee,date_retour,description) values (?,?,?,?,?,?,?) "; // précomplier
         try {
 
@@ -67,60 +60,10 @@ public class EventC {
             pst.setTimestamp(6, (Timestamp) e.getDate_retour());
             pst.setString(7, e.getDescription());
             pst.executeUpdate();
-            if (SystemTray.isSupported()) {
-            TrayIconDemo td = new TrayIconDemo();
-                try {
-                    td.trayAjout();
-                } catch (AWTException ex) {
-                    Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
-                }
-        } else {
-            System.err.println("System tray not supported!");
-        }
         } catch (SQLException ex) {
+           
             Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }else {
-            System.out.println("on a deja ajouté cet event à cette date");
-        }
-    
-    
-    }
-public String listEvent(){
-        String mail="";
-        String requete = "SELECT * FROM event";
-          
-        try {
-  Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery(requete);// trajaa base de donnee huh
-            while (rs.next()) {
-                mail +="\n\n";
-                Event e = new Event();
-                e.setId_event(rs.getInt(1));
-                e.setNom(rs.getString(2));
-               e.setNbr_place(rs.getInt(3));
-                e.setDepart(rs.getString(4));
-                e.setArrivee(rs.getString(5));
-                e.setDate_allee(rs.getTimestamp(6));
-                e.setDate_retour(rs.getTimestamp(7));
-                e.setDescription(rs.getString(8));
-                
-                mail +="L'activite numero " + e.getId_event()+" :";
-                mail +="\n  Date = " + e.getNom();
-                mail +="\n  Date = " + e.getNbr_place();
-                mail +="\n  Date = " + e.getDepart();
-                mail +="\n  Libelle = " + e.getArrivee();
-                 mail +="\n  Date = " + e.getDate_allee();
-                mail +="\n  Date = " + e.getDate_retour();
-                mail +="\n  Description = " + e.getDescription();
-           
-                
-            }
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return mail;
     }
 
     public List<Event> afficherEvent() {
@@ -135,6 +78,7 @@ public String listEvent(){
                 list.add(recupereResultat(rs));
             }
         } catch (SQLException ex) {
+      //      System.out.println(ex.getMessage());
             Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
@@ -152,23 +96,42 @@ public String listEvent(){
 
     }
     
-        public void modifierEvent(int id ,String Nom, int  NbrPlace, String Depart, Timestamp date_allee, Timestamp date_retour,String description) {
-       
-       String   requete = "update event set nom=?, nbr_place=?, depart=?, date_allee=?, date_retour=?,description=?  where id_event=?";
-         try {
+       public boolean modifierEvent(int id,String champs,Object value){
+    String   requete = "update event set "+champs+"=?  where id_event=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("event","id_event",id)==true && FonctionsPartages.verifierSiChampExistant("event",champs)==true){
+       try {
             PreparedStatement pt= cn.prepareStatement(requete);
-            pt.setInt(7, id);
-            pt.setString(1,Nom);
-            pt.setInt(2, NbrPlace);
-            pt.setString(3, Depart);
-            pt.setTimestamp(4, date_allee);
-            pt.setTimestamp(5, date_retour);
-            pt.setString(6, description); 
+            
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+            Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+       }else{
+             System.out.println("le champs ou l'identifiant est incorrect");
+         }
+       
+       return false;
+   }
 public List<Event> rechercher(String nom )
      {
          List<Event> list= new ArrayList<>();
@@ -283,27 +246,4 @@ public List<Event> rechercher(String nom )
    return list;
    }
 
-    
-          public Event retournerEvent(int id){
-        try {
-               PreparedStatement pt=cn.prepareStatement("select * from event where id_event=?");
-           pt.setInt(1,id);
-            ResultSet rs = pt.executeQuery();
-            while (rs.next()){
-              return recupereResultat(rs);
-            }
-        }
-         catch (SQLException ex) {
-            Logger.getLogger(ChauffeurC.class.getName()).log(Level.SEVERE, null, ex);
-    }
-        return null;
-   }
-    
-    
-    
-    
-    
-    
-    
-    
 }

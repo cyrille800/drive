@@ -5,6 +5,8 @@
  */
 package Test;
 
+import Core.*;
+import Utils.Criteres;
 import Utils.DataSource;
 import Utils.Interval;
 import java.sql.Timestamp;
@@ -34,7 +36,6 @@ public class ClientReservation {
     ClientC cs= new ClientC();
     ReservationC rs= new ReservationC();
     
-
     rs.RechercheAvance("2019").stream().forEach(System.out::println);
     /*
         Interval i = new Interval();

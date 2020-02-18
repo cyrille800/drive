@@ -27,6 +27,15 @@ public class Velo {
         this.photo = photo;
         this.prix=prix;
     }
+    
+    public Velo(int id,String type, String adresse, int qte, String photo,float prix) {
+        this.id=id;
+        this.type = type;
+        this.adresse = adresse;
+        this.qte = qte;
+        this.photo = photo;
+        this.prix=prix;
+    }
 
     public Velo() {
     }
@@ -102,12 +111,19 @@ public class Velo {
             return false;
         }
         final Velo other = (Velo) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
         if (!Objects.equals(this.photo, other.photo)) {
             return false;
         }
         return true;
     }
 
+    
    
     
 }
