@@ -68,7 +68,7 @@ public class OffreC {
     }
     
  
-       public boolean modifierEvent(int id,String champs,Object value){
+       public boolean modifierOffre(int id,String champs,Object value){
     String   requete = "update offre set "+champs+"=?  where id_offre=?";
          if(FonctionsPartages.verifierExistanteDuneValeur("offre","id_offre",id)==true && FonctionsPartages.verifierSiChampExistant("offre",champs)==true){
        try {
@@ -236,7 +236,7 @@ public class OffreC {
     
     
     /**********************************************************************************************************************************/
-         public List<Offre> filtrerParInterval(Interval listeInterval){
+  /*       public List<Offre> filtrerParInterval(Interval listeInterval){
         
      
      List<Offre> list =new ArrayList<>();
@@ -253,7 +253,7 @@ public class OffreC {
             Logger.getLogger(OffreC.class.getName()).log(Level.SEVERE, null, ex);
     }
         return list;
-     }
+     }*/
    public List<Offre> filterSelonDesCritere(Criteres critere){
    List<Offre> list =new ArrayList<>();
    String requete=Utils.FonctionsPartages.genererRequetteTrie("offre",critere.getListeCritere());
