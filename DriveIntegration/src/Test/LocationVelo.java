@@ -5,7 +5,6 @@
  */
 package Test;
 
-import Core.ClientC;
 import Core.LocationC;
 import Core.VeloC;
 import Entities.Location;
@@ -41,9 +40,8 @@ public class LocationVelo {
              java.util.Date parsedDate2 = dateFormat.parse("2021-02-09 12:55:05");
           Timestamp timestamp1=new java.sql.Timestamp(parsedDate.getTime());
           Timestamp timestamp2=new java.sql.Timestamp(parsedDate2.getTime());
-          ClientC c= new ClientC();
-          VeloC v=new VeloC();
-          Location p = new Location(c.retournerClient(15),v.retournerVelo(1),timestamp1,timestamp2);
+          
+         // Location p = new Location(1,15,timestamp1,timestamp2,3);
    LocationC pr = new LocationC();
    //pr.ajouterLocation(p);
     //System.out.println(pr.afficher());
