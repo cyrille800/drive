@@ -244,14 +244,6 @@ Matcher matcher = p.matcher(date);
       
    }
         
-        public static boolean validerDate(Timestamp dt){
-            Timestamp toDay = new Timestamp(System.currentTimeMillis());
-            if(calculerNombreSeconde(toDay, dt)<0){
-            return false;
-            }
-            return true;
-        }
-        
         public static String genererRequetteInterval(String table,Map<String,Object[]> listeInterval){
             if(verifierSiTableExistant(table)){
             String requete=" select * from "+table;

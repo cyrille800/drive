@@ -9,11 +9,13 @@ package Core;
 import Entities.Event;
 import Utils.Criteres;
 import Utils.DataSource;
+import Utils.FonctionsPartages;
 import Utils.Interval;
 import Utils.TrayIconDemo;
 import java.awt.AWTException;
 import java.awt.SystemTray;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -78,6 +80,7 @@ public class EventC {
             System.err.println("System tray not supported!");
         }
         } catch (SQLException ex) {
+           
             Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }else {
@@ -135,6 +138,7 @@ public String listEvent(){
                 list.add(recupereResultat(rs));
             }
         } catch (SQLException ex) {
+      //      System.out.println(ex.getMessage());
             Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
@@ -152,23 +156,42 @@ public String listEvent(){
 
     }
     
-        public void modifierEvent(int id ,String Nom, int  NbrPlace, String Depart, Timestamp date_allee, Timestamp date_retour,String description) {
-       
-       String   requete = "update event set nom=?, nbr_place=?, depart=?, date_allee=?, date_retour=?,description=?  where id_event=?";
-         try {
+       public boolean modifierEvent(int id,String champs,Object value){
+    String   requete = "update event set "+champs+"=?  where id_event=?";
+         if(FonctionsPartages.verifierExistanteDuneValeur("event","id_event",id)==true && FonctionsPartages.verifierSiChampExistant("event",champs)==true){
+       try {
             PreparedStatement pt= cn.prepareStatement(requete);
-            pt.setInt(7, id);
-            pt.setString(1,Nom);
-            pt.setInt(2, NbrPlace);
-            pt.setString(3, Depart);
-            pt.setTimestamp(4, date_allee);
-            pt.setTimestamp(5, date_retour);
-            pt.setString(6, description); 
+            
+            if (value instanceof Integer){
+            pt.setInt(1,(int) value);
+            }
+             if (value instanceof Float){
+            pt.setFloat(1,(float) value);
+            }   
+             if (value instanceof Double){
+            pt.setDouble(1,(double) value);
+            } 
+             if (value instanceof String){
+            pt.setString(1,(String) value);
+            } 
+             if (value instanceof Date){
+            pt.setDate(1,(Date) value);
+            } 
+             if (value instanceof Timestamp){
+            pt.setTimestamp(1,(Timestamp) value);
+            } 
+            pt.setInt(2, id);
             pt.executeUpdate();
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(EventC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+            Logger.getLogger(ReservationC.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+       }else{
+             System.out.println("le champs ou l'identifiant est incorrect");
+         }
+       
+       return false;
+   }
 public List<Event> rechercher(String nom )
      {
          List<Event> list= new ArrayList<>();
