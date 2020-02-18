@@ -46,21 +46,12 @@ public class LocationC {
    }
        
    public void ajouterLocation(Location p){
-         String requete ="select prix from velo where id=? limit 1";
+      if(p.getVelo().getQte()>0){
+           if(Utils.FonctionsPartages.verifierExistanteDuneValeur("location", "id_velo", p.getVelo().getId())==false && Utils.FonctionsPartages.verifierExistanteDuneValeur("location", "id_client", p.getClient().getId_user())==false){
+           String requete ="select prix from velo where id=? limit 1";
        PreparedStatement pt1;
        float prix=0;
-          
-       try {
-               pt1 = cn.prepareStatement(requete);
-               pt1.setInt(1,p.getId_velo());
-            ResultSet rs= pt1.executeQuery();
-            while (rs.next()){
-                float prixLocal=rs.getFloat(1);
-                prix= Utils.FonctionsPartages.calculerPrixParraportAuTemps(prixLocal, Utils.FonctionsPartages.calculerNombreSeconde(p.getDate_d(), p.getDate_f()));
-            }
-           } catch (SQLException ex) {
-               Logger.getLogger(LocationC.class.getName()).log(Level.SEVERE, null, ex);
-           }
+        prix= Utils.FonctionsPartages.calculerPrixParraportAuTemps(p.getVelo().getPrix(), Utils.FonctionsPartages.calculerNombreSeconde(p.getDate_d(), p.getDate_f()));
        //fin
        
           requete ="insert into location(id_client,id_velo,date_d,date_f,prix) values (?,?,?,?,?) ";
@@ -74,9 +65,16 @@ public class LocationC {
             pst.setTimestamp(4,(Timestamp) p.getDate_f());
             pst.setFloat(5,prix);
             pst.executeUpdate();
+            int qt=p.getVelo().getQte()-1;
+            VeloC v= new VeloC();
+            v.modifierVelo(p.getVelo().getId(), "qte", qt);
         } catch (SQLException ex) {
             Logger.getLogger(LocationC.class.getName()).log(Level.SEVERE, null, ex);
         }
+         
+      }else{
+          System.out.println("quantite insuffisante");
+      }
          
     }
     public List<Location> afficher(){

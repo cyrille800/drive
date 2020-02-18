@@ -46,7 +46,7 @@ public class ReclamationC {
                 return a;
    }
    public void ajouterReclamation(Reclamation r){
-          String requete ="insert into reclamation(id_client,sujet_rec,msg,etat,dateAjout) values (?,?,?,?,?) ";
+         String requete ="insert into reclamation(id_client,sujet_rec,msg,etat) values (?,?,?,?) ";
         try {
           
             PreparedStatement pst = cn.prepareStatement(requete);
@@ -54,7 +54,6 @@ public class ReclamationC {
             pst.setString(2,r.getSujet_rec());
             pst.setString(3,r.getMsg());
             pst.setInt(4,r.getEtat());
-            pst.setTimestamp(5,(Timestamp) r.getDateAjout());
             pst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ReclamationC.class.getName()).log(Level.SEVERE, null, ex);
