@@ -13,18 +13,22 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Armand
  */
 public class ClientReservation {
-    public static void startConsole() throws ParseException{
+    public static void startConsole(){
     DataSource ds =  DataSource.getInstance();
     
     SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    Date parsedDate = dateFormat.parse("2021-02-09 11:20:21");
-    java.util.Date parsedDate2 = dateFormat.parse("2021-02-09 12:55:05");
+    Date parsedDate;
+        try {
+            parsedDate = dateFormat.parse("2021-02-09 11:20:21");
+     java.util.Date parsedDate2 = dateFormat.parse("2021-02-09 12:55:05");
     Timestamp timestamp1=new java.sql.Timestamp(parsedDate.getTime());
     Timestamp timestamp2=new java.sql.Timestamp(parsedDate2.getTime());
     
@@ -33,6 +37,10 @@ public class ClientReservation {
     ReservationC rs= new ReservationC();
     
     rs.RechercheAvance("2019").stream().forEach(System.out::println);
+        } catch (ParseException ex) {
+            Logger.getLogger(ClientReservation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     /*
         Interval i = new Interval();
         i.ajouter("heure", "2018-01-01", "2019-12-30");
